@@ -31,9 +31,9 @@ export default function Home() {
 
       <main id="top">
         <section className="hero"><div className="wrap">
-          <p className="eyebrow">Android assistant · Vultr Agent Rush</p>
-          <h1>An assistant that <em>acts</em> on your phone.</h1>
-          <p className="lead">Pocketnode lives on your Android phone. Say &ldquo;turn on the flashlight&rdquo; or &ldquo;wake me at 6:30&rdquo; and it does it. Every model call goes through Vultr Serverless Inference.</p>
+          <p className="eyebrow">Browser and Android agent · Vultr Agent Rush</p>
+          <h1>An agent that <em>acts</em> in your browser and on your phone.</h1>
+          <p className="lead">In the browser it searches, opens tabs and writes small programs that run live in a locked frame. On your Android phone it turns on the flashlight or wakes you at 6:30. Every model call goes through Vultr Serverless Inference.</p>
           <div className="cta"><a className="btn" href="/app/">Try it in your browser</a><a className="btn ghost" href="/downloads/pocketnode.apk">Download for Android</a><a className="btn ghost" href={REPO}>View the code</a></div>
           <div className="chat" role="img" aria-label="Example: the user asks to turn on the flashlight and Pocketnode confirms">
             <div className="msg me">Turn on the flashlight</div>
@@ -51,7 +51,7 @@ export default function Home() {
         <section className="band alt" id="try"><div className="wrap">
           <h2>Two ways to try it</h2>
           <div className="cards two">
-            <article className="card"><h3>In your browser</h3><p>Sign up and ask it to search the web, read a page or open a site in a new tab. Nothing to install. Search is limited to a daily number of messages per account.</p><p style={{ marginTop: 14 }}><a className="btn small" href="/app/">Open the web app</a></p></article>
+            <article className="card"><h3>In your browser</h3><p>Sign up and ask it to search the web, open a page in a new tab, or build a small program that runs live in a locked frame. Nothing to install. Each account has a daily message limit.</p><p style={{ marginTop: 14 }}><a className="btn small" href="/app/">Open the web app</a></p></article>
             <article className="card"><h3>On your Android phone</h3><p>Download the test build (Android 7.0 or newer), allow installs from this site, then open it. On the model screen choose Vultr and paste your own Vultr Inference key. There are no accounts in the phone app; your chats stay on the phone.</p><p style={{ marginTop: 14 }}><a className="btn small" href="/downloads/pocketnode.apk">Download the APK</a></p></article>
           </div>
         </div></section>
