@@ -1,156 +1,94 @@
-import Link from "next/link";
-import { config, asset } from "@/lib/config";
-import { allPacks } from "@/lib/packs";
-import { HeroTitle } from "@/components/HeroTitle";
-import { HeroRing, Orb } from "@/components/Orb";
-import { PhoneDemo } from "@/components/PhoneDemo";
-import { VoiceDemo } from "@/components/VoiceDemo";
-import { Reveal } from "@/components/Reveal";
-import { SpotCard } from "@/components/SpotCard";
-import { MiniOrb } from "@/components/MiniOrb";
+const REPO = "https://github.com/zerroai/pocketnode";
 
-const Tile = ({ name }: { name: string }) => <img className="tile" src={asset(`/brand/icons/${name}.svg`)} alt="" width={48} height={48} />;
-
-const pillars = [
-  ["phone", "Lives on your phone", "Your chats, notes, reminders and files stay on the phone, in the app's private storage. There is no account to create."],
-  ["server", "Your choice of model", "Connect OpenRouter, OpenAI, Groq, Anthropic, or a model on your own computer. You pay your provider directly."],
-  ["lock", "Asks first", "Calendar, contacts, location, photos and email are off until you switch them on. The most private things ask every single time."],
-  ["eye", "Shows its work", "The Activity record lists what it did and what left the phone. One switch turns the whole assistant off."],
-] as const;
-
-const features = [
-  ["chat", "Ask in plain words", "Type or speak. Attach a photo or a file, or share something into the app from another one."],
-  ["voice", "Talk like a phone call", "Tap the voice button and just talk. It listens, answers out loud, and listens again. Speak over it to stop it."],
-  ["bell", "Reminders and a morning briefing", "Say when, in plain words. Reminders appear even when the app is closed. The briefing gives you a short summary at the time you choose."],
-  ["files", "Makes real files", "PDFs, spreadsheets and text files, kept locked on your phone. Open them, save a copy, or share them."],
-  ["mail", "Email from your own account", "Reads your inbox and drafts mail. It never sends anything without showing it to you first."],
-  ["channel", "Telegram and WhatsApp", "Talk to your assistant from the chat apps you already use. Only chats you approve get answers."],
-  ["agents", "Agents that run by themselves", "Build a job as a flow, or describe it in a chat. For example, tell you each morning whether it will rain."],
-  ["packs", "Packs add abilities", "Weather, notes, budgets, calendar, documents and more. Each pack lists exactly what it may touch."],
+const abilities = [
+  ["Controls your phone", "Flashlight, alarms, timers, calls, texts, maps, sharing and notifications. You ask in plain words; it picks the right action."],
+  ["Remembers things", "Notes, to-do lists and reminders that fire even when the app is closed."],
+  ["Answers on Telegram", "Message your assistant from Telegram. A small relay holds each message until your phone collects it."],
+  ["Runs jobs by itself", "Build an agent on a flow canvas, for example a check that tells you each morning whether it will rain."],
 ] as const;
 
 const faq = [
-  ["Is it free?", "You get a 14 day free trial with everything included and no payment details. Paid plans open later. Separately, the AI model you connect charges you for its own use, and we take no cut of that."],
-  ["Which phones work?", "Android 7.0 and newer. There is no iPhone version yet."],
-  ["Does the AI run on my phone?", "No. The assistant, your chats and your files are on your phone, but the AI model runs at the provider you choose, or on your own computer if you prefer. A model that runs entirely on the phone is not offered yet."],
-  ["Who pays for the AI?", "You do, directly to your provider, based on how much you use. Short requests cost very little. The guide shows how to keep it at or near zero with a free plan or your own computer."],
-  ["Is it open source?", "No. Pocketnode is closed source. In its place we publish plain documents about what it does with your data and a threat model, and the app has an Activity record that shows what it did. An independent security review is planned before release and has not happened yet."],
-  ["What can it not do?", "It cannot buy things or move money. It has no payment abilities. Anything private is off until you switch it on, and the most private things ask you every time."],
+  ["Which phones work?", "Android 7.0 and newer. It has been tested on a Samsung Galaxy S9 running Android 10. There is no iPhone version."],
+  ["Where do my chats live?", "On the phone, in the app's private storage. Keys are kept in Android's secure keystore. The model provider sees the messages you send it."],
+  ["Can it do anything it likes on my phone?", "No. Each tool lists what it may touch. Sensitive actions, such as reading contacts or the calendar, are off until you switch them on, and some ask every time."],
+  ["Is it finished?", "No. It is an early build made for the Vultr Agent Rush hackathon. Expect rough edges."],
 ] as const;
 
 export default function Home() {
-  const packs = allPacks();
-  const half = Math.ceil(packs.length / 2);
-  const rowA = packs.slice(0, half), rowB = packs.slice(half);
   return (
     <>
-      <section className="hero">
-        <div className="wrap grid">
-          <div>
-            <p className="eyebrow live">For Android</p>
-            <HeroTitle text="A helper on your phone that gets things done." />
-            <Reveal delay={0.5}><p className="lead">{config.name} is an assistant that lives on your phone. Ask in plain words, by typing or by talking. It looks things up, sets reminders, makes PDFs and spreadsheets, and runs jobs on its own. It asks before it touches anything private.</p></Reveal>
-            <Reveal delay={0.65}>
-              <div className="cta"><Link className="btn" href="/download/">Download for Android</Link><Link className="btn secondary" href="/docs/guide/01-getting-started/">Read the guide</Link></div>
-              <p className="muted small">Android 7.0 or newer. 14 day free trial with everything included. No payment details.</p>
-            </Reveal>
-          </div>
-          <div className="hero-stage">
-            <div className="hero-ring" style={{ color: "var(--mc-text)" }}><HeroRing /></div>
-            <PhoneDemo />
-            <span className="floating-note a">Asks before it acts</span>
-            <span className="floating-note b">Your chats stay here</span>
-          </div>
+      <header className="top">
+        <div className="wrap bar">
+          <a className="brand" href="#top" aria-label="Pocketnode home">
+            <svg width="28" height="28" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="16" fill="currentColor" /><circle cx="26" cy="38" r="9" fill="var(--paper)" /><path d="M38 26a14 14 0 0 1 14 14M38 14a26 26 0 0 1 26 26" fill="none" stroke="var(--paper)" strokeWidth="4" strokeLinecap="round" transform="translate(-8 4) scale(.85)" /></svg>
+            Pocketnode
+          </a>
+          <nav aria-label="Main">
+            <a href="#what">What it does</a><a href="#vultr">On Vultr</a><a href="#run">Run it</a><a className="btn small" href={REPO}>GitHub</a>
+          </nav>
         </div>
-        <p className="wrap muted small" style={{ textAlign: "right", marginTop: 8 }}>An illustration of the chat, not a recording of the app.</p>
-      </section>
+      </header>
 
-      <section className="band" id="why"><div className="wrap">
-        <Reveal><span className="sec-num">01 / Control</span><h2>Yours, and under your control</h2><p className="intro">Four things hold true however you use it.</p></Reveal>
-        <div className="cards">{pillars.map(([icon, h, t], i) => <Reveal key={h} delay={i * 0.08}><SpotCard><Tile name={icon} /><h3>{h}</h3><p>{t}</p></SpotCard></Reveal>)}</div>
-      </div></section>
+      <main id="top">
+        <section className="hero"><div className="wrap">
+          <p className="eyebrow">Android assistant · Vultr Agent Rush</p>
+          <h1>An assistant that <em>acts</em> on your phone.</h1>
+          <p className="lead">Pocketnode lives on your Android phone. Say &ldquo;turn on the flashlight&rdquo; or &ldquo;wake me at 6:30&rdquo; and it does it. Every model call goes through Vultr Serverless Inference.</p>
+          <div className="cta"><a className="btn" href={REPO}>View the code</a><a className="btn ghost" href="#vultr">How it uses Vultr</a></div>
+          <div className="chat" role="img" aria-label="Example: the user asks to turn on the flashlight and Pocketnode confirms">
+            <div className="msg me">Turn on the flashlight</div>
+            <div className="tool"><span className="dot" />Phone · Flashlight on</div>
+            <div className="msg bot">Flashlight is on.</div>
+            <p className="cap">From a real run on a Galaxy S9: about 3 seconds from request to reply.</p>
+          </div>
+        </div></section>
 
-      <section className="band alt" id="features"><div className="wrap">
-        <Reveal><span className="sec-num">02 / Abilities</span><h2>What it can do</h2><p className="intro">Ask for what you want. It uses small add-ons called packs to do it, and shows a card for each one it uses.</p></Reveal>
-        <div className="cards">{features.map(([icon, h, t], i) => <Reveal key={h} delay={(i % 4) * 0.07}><SpotCard><Tile name={icon} /><h3>{h}</h3><p>{t}</p></SpotCard></Reveal>)}</div>
-      </div></section>
+        <section className="band" id="what"><div className="wrap">
+          <h2>What it does</h2>
+          <div className="cards">{abilities.map(([h, t]) => <article key={h} className="card"><h3>{h}</h3><p>{t}</p></article>)}</div>
+        </div></section>
 
-      <section className="band" id="voice"><div className="wrap split">
-        <Reveal>
-          <span className="sec-num">03 / Voice</span>
-          <h2>Talk to it like a call</h2>
-          <p className="intro">Nothing to tap in between.</p>
+        <section className="band alt" id="vultr"><div className="wrap">
+          <h2>How it uses Vultr</h2>
+          <p className="intro">Two Vultr services do the work. The phone stays in charge of your data.</p>
+          <div className="flow" aria-label="Architecture">
+            <div className="node">Telegram</div><span className="arrow">→</span>
+            <div className="node strong">Relay<small>Vultr Cloud Compute</small></div><span className="arrow">→</span>
+            <div className="node">Your phone<small>runs the assistant</small></div><span className="arrow">→</span>
+            <div className="node strong">Model<small>Vultr Serverless Inference</small></div>
+          </div>
+          <div className="cards two">
+            <article className="card"><h3>Vultr Serverless Inference</h3><p>The phone talks to <code>api.vultrinference.com/v1</code> with ordinary tool calling. In our tests <code>deepseek-v4.1-flash-1017</code>, <code>glm-5.3-flash</code> and <code>mimo-v2.6-flash</code> each picked the right tool on every try, in about 1.2 seconds. Vultr is the preset in the setup screen.</p></article>
+            <article className="card"><h3>Vultr Cloud Compute</h3><p>The relay is one small service and one SQLite file, run with Docker Compose behind Caddy, which gets its own TLS certificate. Phones only ever connect out to it. Messages are stored encrypted and deleted once the phone confirms it has them.</p></article>
+          </div>
+        </div></section>
+
+        <section className="band" id="safe"><div className="wrap">
+          <h2>Kept on a short leash</h2>
           <ul className="checks">
-            <li><span>It listens, thinks, answers out loud, then listens again.</span></li>
-            <li><span>Start talking while it is talking and it stops and listens to you.</span></li>
-            <li><span>Anything that needs your OK, such as deleting something, still asks on the screen and waits.</span></li>
-            <li><span>Each call is saved as text under Profile, then Calls, where you can read, rename or delete it. The sound is not recorded.</span></li>
+            <li>Tools run in a sandbox and can only use the permissions they declare.</li>
+            <li>Private actions need your switch. The most sensitive ask every time.</li>
+            <li>An Activity record lists what the assistant did and what left the phone.</li>
+            <li>One switch turns the whole assistant off.</li>
           </ul>
-          <div className="note"><strong>Plain about the limits</strong>The call works while {config.name} is on the screen, because Android does not let a hidden app keep the microphone open. Your phone&apos;s own speech service turns your voice into words and may send the audio to its provider, the same way your keyboard&apos;s dictation does. {config.name} receives only the words.</div>
-        </Reveal>
-        <Reveal delay={0.1}><VoiceDemo /></Reveal>
-      </div></section>
+        </div></section>
 
-      <section className="band alt" id="packs"><div className="wrap">
-        <Reveal><span className="sec-num">04 / Packs</span><h2>Add abilities, like map packs</h2><p className="intro">The base app is small. You add what you need. Every pack is signed and checked before it installs, and none can download and run native code.</p></Reveal>
-      </div>
-        <div className="ticker" aria-label="The packs">
-          <div className="track">{[...rowA, ...rowA].map((p, i) => <Link key={i} className="chip" href={p.href} tabIndex={i >= rowA.length ? -1 : undefined} aria-hidden={i >= rowA.length ? true : undefined}>{p.name}</Link>)}</div>
-        </div>
-        <div className="ticker rev" aria-hidden="true">
-          <div className="track">{[...rowB, ...rowB].map((p, i) => <Link key={i} className="chip" href={p.href} tabIndex={-1}>{p.name}</Link>)}</div>
-        </div>
-        <div className="wrap"><p style={{ marginTop: 28 }}><Link className="btn secondary" href="/packs/">See all {packs.length} packs</Link></p></div>
-      </section>
+        <section className="band alt" id="run"><div className="wrap">
+          <h2>Run it</h2>
+          <pre><code>{`git clone ${REPO}
+cd pocketnode
+./gradlew :app:assembleDebug     # the Android app
+./gradlew :core:test :relay:test # tests`}</code></pre>
+          <p>In the app, choose <strong>Vultr</strong> on the model screen and paste your Vultr Inference key. To host the relay, see <code>deploy/relay/</code>.</p>
+        </div></section>
 
-      <section className="band" id="privacy"><div className="wrap split">
-        <Reveal>
-          <span className="sec-num">05 / Privacy</span>
-          <h2>Plain about privacy</h2>
-          <p className="intro">What stays, what leaves, and how you stay in charge.</p>
-          <Link className="btn secondary" href="/docs/guide/08-privacy-and-control/">Read privacy and control</Link>
-        </Reveal>
-        <Reveal delay={0.1}>
-          <ul className="checks">
-            <li><span><strong>On your phone:</strong> chats, notes, reminders, files and settings, in the app&apos;s private storage. No servers hold them. Nothing is backed up to the cloud.</span></li>
-            <li><span><strong>Locked keys:</strong> your keys and passwords are encrypted with a key held by Android&apos;s secure hardware.</span></li>
-            <li><span><strong>To your model provider:</strong> your messages, recent conversation, tool results and anything you attach. The provider can read them, so choose one you trust or run a model on your own computer.</span></li>
-            <li><span><strong>Closed source, openly documented:</strong> we publish what it does with your data and a threat model. An independent security review is planned and has not been done yet.</span></li>
-          </ul>
-        </Reveal>
-      </div></section>
+        <section className="band" id="faq"><div className="wrap">
+          <h2>Questions</h2>
+          <div className="faq">{faq.map(([q, a]) => <details key={q}><summary>{q}</summary><p>{a}</p></details>)}</div>
+        </div></section>
+      </main>
 
-      <section className="band alt" id="start"><div className="wrap">
-        <Reveal><span className="sec-num">06 / Start</span><h2>Start in a few minutes</h2><p className="intro">The app walks you through it. You need an Android phone and a connection to an AI model.</p></Reveal>
-        <ol className="steps">
-          {[["Install", "Download the app on the download page and open it."], ["Start the free trial", "14 days, everything included, no payment details."], ["Connect a model", "Pick OpenRouter, OpenAI, Groq, Anthropic or your own computer, and paste your key. The app checks it for you."], ["Ask for something", "Try \"What is the weather in my city right now?\" or \"Remind me to stretch in 30 minutes.\""]].map(([h, t], i) => (
-            <li key={h}><Reveal delay={i * 0.08}><h3>{h}</h3><p>{t}</p></Reveal></li>
-          ))}
-        </ol>
-      </div></section>
-
-      <section className="band" id="plans"><div className="wrap">
-        <Reveal><span className="sec-num">07 / Plans</span><h2>Plans</h2><p className="intro">Start free. The model you connect is billed by your provider, not by us.</p></Reveal>
-        <Reveal delay={0.1}>
-          <div className="plans">
-            <div className="plan main"><h3>Free trial</h3><div className="price">14 days</div><ul><li>Everything included</li><li>No payment details</li><li>No account to create</li></ul><Link className="btn" href="/download/">Get the app</Link></div>
-            <div className="plan"><h3>Personal</h3><div className="price">{config.personalPrice || "Not open yet"}</div>{config.personalPrice && !config.purchasesOpen ? <p className="muted small" style={{ margin: "-6px 0 12px" }}>Planned price. It cannot be bought yet.</p> : null}<ul><li>For people using it on their own phone</li><li>{config.personalPrice ? "Paid with a licence key" : "Price and billing are not set yet"}</li></ul><Link className="btn secondary" href="/pricing/">See the plans</Link></div>
-          </div>
-        </Reveal>
-      </div></section>
-
-      <section className="band alt" id="faq"><div className="wrap">
-        <Reveal><span className="sec-num">08 / Questions</span><h2>Questions</h2></Reveal>
-        <div className="faq">{faq.map(([q, a]) => <details key={q}><summary>{q}</summary><div className="answer">{a}</div></details>)}</div>
-        <p><Link href="/docs/guide/11-faq/">More questions and answers</Link></p>
-      </div></section>
-
-      <section className="cta-band"><div className="wrap">
-        <Reveal><MiniOrb /></Reveal>
-        <Reveal delay={0.1}><h2>A helper that stays yours</h2></Reveal>
-        <Reveal delay={0.15}><p className="lead">Free for 14 days. No payment details. No account.</p></Reveal>
-        <Reveal delay={0.2}><div className="cta"><Link className="btn" href="/download/">Download for Android</Link><Link className="btn secondary" href="/docs/">Read the documentation</Link></div></Reveal>
-      </div></section>
+      <footer className="foot"><div className="wrap"><span>Pocketnode</span><a href={REPO}>github.com/zerroai/pocketnode</a></div></footer>
     </>
   );
 }

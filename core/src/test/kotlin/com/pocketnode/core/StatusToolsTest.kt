@@ -22,6 +22,5 @@ class StatusToolsTest {
 
     @Test fun statusAndDevices() {
         assertEquals("Assistant: on\nUsed today: 3k of 50k", call("assistant.status"))
-        assertEquals("Desktop", call("device.list"))
     }
 }

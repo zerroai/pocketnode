@@ -139,6 +139,7 @@ internal fun SetupFrame(
 private class Preset(val name: String, val url: String, val model: String, val keyPage: String)
 
 private val presets = listOf(
+    Preset("Vultr", "https://api.vultrinference.com/v1", "deepseek-v4.1-flash-1017", "https://my.vultr.com/"),
     Preset("OpenRouter", "https://openrouter.ai/api/v1", "openai/gpt-4o-mini", "https://openrouter.ai/keys"),
     Preset("OpenAI", "https://api.openai.com/v1", "gpt-4o-mini", "https://platform.openai.com/api-keys"),
     Preset("Groq", "https://api.groq.com/openai/v1", "llama-3.3-70b-versatile", "https://console.groq.com/keys"),
@@ -147,13 +148,13 @@ private const val ANTHROPIC_KEYS = "https://console.anthropic.com/settings/keys"
 
 /** State for the model connection form. Used by setup and by Settings. */
 class ModelFormState(initial: Provider) {
-    var provider by mutableStateOf(if (initial == Provider.None) Provider.Anthropic else initial)
+    var provider by mutableStateOf(if (initial == Provider.None) Provider.OpenAi else initial)
     var key by mutableStateOf("")
     var tier by mutableStateOf(CoreHost.config.tier)
     var url by mutableStateOf(CoreHost.config.serverUrl)
     var model by mutableStateOf(CoreHost.config.serverModel)
-    var openAiUrl by mutableStateOf(CoreHost.config.openAiUrl.ifBlank { "https://api.openai.com/v1" })
-    var openAiModel by mutableStateOf(CoreHost.config.openAiModel)
+    var openAiUrl by mutableStateOf(CoreHost.config.openAiUrl.ifBlank { "https://api.vultrinference.com/v1" })
+    var openAiModel by mutableStateOf(CoreHost.config.openAiModel.ifBlank { "deepseek-v4.1-flash-1017" })
     var checking by mutableStateOf(false)
     var error by mutableStateOf<String?>(null)
 

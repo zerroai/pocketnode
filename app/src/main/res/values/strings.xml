@@ -6,13 +6,13 @@
     <string name="onb_an_assistant_that_runs_on_your_phone">An assistant that runs on your phone.</string>
     <string name="onb_private_by_design">Private by design</string>
     <string name="onb_your_chats_and_keys_stay_on_this_phone_a">Your chats and keys stay on this phone, and you can see everything that leaves it.</string>
-    <string name="onb_extend_with_packs">Extend with packs</string>
-    <string name="onb_add_messaging_and_tools_as_you_need_them">Add messaging and tools as you need them.</string>
+    <string name="onb_extend_with_packs">Does things on your phone</string>
+    <string name="onb_add_messaging_and_tools_as_you_need_them">Flashlight, alarms, calls, notes, reminders and Telegram are built in.</string>
     <string name="onb_bring_your_own_model">Bring your own model</string>
-    <string name="onb_use_openrouter_openai_anthropic_or_a_mod">Use OpenRouter, OpenAI, Anthropic or a model on your own computer. Your provider bills you directly.</string>
+    <string name="onb_use_openrouter_openai_anthropic_or_a_mod">Use Vultr Inference, OpenRouter, OpenAI, Anthropic or a model on your own computer. Your provider bills you directly.</string>
     <string name="onb_get_started">Get started</string>
     <string name="onb_back">Back</string>
-    <string name="onb_openrouter_openai_groq">OpenRouter, OpenAI, Groq</string>
+    <string name="onb_openrouter_openai_groq">Vultr, OpenRouter, OpenAI, Groq</string>
     <string name="onb_one_key_many_models_the_easiest_start">One key, many models. The easiest start.</string>
     <string name="onb_anthropic">Anthropic</string>
     <string name="onb_claude_models_with_your_api_key">Claude models with your API key</string>

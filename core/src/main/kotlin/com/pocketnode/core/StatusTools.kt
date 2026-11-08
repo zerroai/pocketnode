@@ -34,9 +34,6 @@ object StatusTools {
         tool("assistant.status", "Tells the owner how the assistant is set up: whether it is on, which model it uses, how much of today's limit is used, the plan, and how many agents and devices there are.", """{"type":"object","properties":{}}""") {
             h.status().joinToString("\n") { (k, v) -> "$k: $v" }
         },
-        tool("device.list", "Lists the owner's paired devices by name.", """{"type":"object","properties":{}}""") {
-            h.devices().let { if (it.isEmpty()) "No devices are paired." else it.joinToString("\n") }
-        },
     )
 
     private fun tool(name: String, about: String, schema: String, body: (String) -> String) = object : Tool {

@@ -165,7 +165,7 @@ object CoreHost {
     @Volatile private var supervisor: ChannelSupervisor? = null
     private var networkWatcherStarted = false
     private val relayClient by lazy { RelayClient(BuildConfig.RELAY_URL, HttpHostNet()) }
-    private val builtin = listOf<Tool>(ClockTool(), com.pocketnode.core.BankAlertsTool({ if (::bankAlerts.isInitialized) bankAlerts else null }, { BankAlertSettings.enabled(appContext) })) +
+    private val builtin = listOf<Tool>(ClockTool()) +
         com.pocketnode.core.StatusTools.all(object : com.pocketnode.core.StatusHost {
             override fun activity(limit: Int, about: String, problemsOnly: Boolean) = run { started.await(); activity.recent(limit, null, about, problemsOnly) }
             override fun status() = listOf(
