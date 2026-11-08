@@ -1,0 +1,24 @@
+{
+  "id": "com.pocketnode.weather",
+  "name": "Weather",
+  "version": "0.1.0",
+  "kind": "tool",
+  "summary": "Current weather and a short forecast for any place, from Open-Meteo. No account needed.",
+  "minCore": "0.1.0",
+  "hostApi": 1,
+  "permissions": { "net": ["geocoding-api.open-meteo.com", "api.open-meteo.com"] },
+  "tools": [
+    {
+      "name": "weather.now",
+      "description": "Gets the current weather (temperature, conditions, wind, humidity) for a city or place name.",
+      "schema": { "type": "object", "properties": { "place": { "type": "string", "description": "City or place, for example Lagos or Paris" } }, "required": ["place"] },
+      "idempotent": true
+    },
+    {
+      "name": "weather.forecast",
+      "description": "Gets the daily forecast (highs, lows, chance of rain) for a city or place name for the next 1 to 7 days.",
+      "schema": { "type": "object", "properties": { "place": { "type": "string" }, "days": { "type": "integer", "minimum": 1, "maximum": 7, "description": "How many days, default 3" } }, "required": ["place"] },
+      "idempotent": true
+    }
+  ]
+}

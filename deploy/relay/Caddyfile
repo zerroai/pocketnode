@@ -1,0 +1,17 @@
+{$RELAY_DOMAIN} {
+	encode zstd gzip
+	reverse_proxy relay:8088 {
+		# Long polls stay open up to 30 seconds.
+		transport http {
+			response_header_timeout 45s
+		}
+	}
+	header {
+		Strict-Transport-Security "max-age=31536000"
+		X-Content-Type-Options nosniff
+		-Server
+	}
+	request_body {
+		max_size 128KB
+	}
+}

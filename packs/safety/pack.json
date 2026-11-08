@@ -1,0 +1,99 @@
+{
+  "id": "com.pocketnode.safety",
+  "name": "Safety",
+  "version": "0.1.0",
+  "kind": "tool",
+  "summary": "Keep one emergency contact, get a ready text with a map link to where you are, and set a check-in reminder. Nothing is sent by itself: you press send.",
+  "minCore": "0.1.0",
+  "hostApi": 1,
+  "permissions": {
+    "device": [
+      "owner.confirm",
+      "sms.compose",
+      "location.get",
+      "reminder.add"
+    ]
+  },
+  "tools": [
+    {
+      "name": "safety.set_contact",
+      "description": "Saves the owner's one emergency contact (name and phone number). The owner is asked to approve it. Use it when the owner tells you who to alert.",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "number": {
+            "type": "string",
+            "description": "Digits, optionally starting with +"
+          }
+        },
+        "required": [
+          "name",
+          "number"
+        ]
+      }
+    },
+    {
+      "name": "safety.contact",
+      "description": "Says who the emergency contact is.",
+      "schema": {
+        "type": "object",
+        "properties": {}
+      }
+    },
+    {
+      "name": "safety.alert",
+      "description": "Use only when the owner says they need help or are in danger. Opens a text to the emergency contact saying they need help, with a map link to where the phone is. The owner is asked to share their location first. NOTHING is sent until the owner presses send in the messages app. If it is urgent, tell the owner to call their local emergency number too.",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "note": {
+            "type": "string",
+            "description": "Optional extra words for the text"
+          }
+        }
+      }
+    },
+    {
+      "name": "safety.share_location",
+      "description": "Opens a text to the emergency contact saying where the owner is, with a map link. The owner is asked to share their location first and presses send themselves.",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "note": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "safety.check_in",
+      "description": "Sets a check-in reminder after some minutes, such as when the owner is walking home or meeting a stranger. It only reminds the owner. It cannot alert anyone by itself, so say so plainly.",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "minutes": {
+            "type": "integer",
+            "description": "1 to 1440"
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "minutes"
+        ]
+      }
+    },
+    {
+      "name": "safety.clear_contact",
+      "description": "Removes the emergency contact. The owner is asked to confirm.",
+      "schema": {
+        "type": "object",
+        "properties": {}
+      }
+    }
+  ]
+}

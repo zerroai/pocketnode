@@ -1,0 +1,24 @@
+{
+  "id": "com.pocketnode.utilities",
+  "name": "Utilities",
+  "version": "0.1.0",
+  "kind": "tool",
+  "summary": "Text statistics and unit conversion for your assistant.",
+  "minCore": "0.1.0",
+  "hostApi": 1,
+  "permissions": {},
+  "tools": [
+    {
+      "name": "text.stats",
+      "description": "Counts the words, characters and lines in a piece of text.",
+      "schema": { "type": "object", "properties": { "text": { "type": "string", "description": "The text to measure" } }, "required": ["text"] },
+      "idempotent": true
+    },
+    {
+      "name": "units.convert",
+      "description": "Converts a number between kilometers and miles, kilograms and pounds, or Celsius and Fahrenheit.",
+      "schema": { "type": "object", "properties": { "value": { "type": "number" }, "from": { "type": "string", "enum": ["km", "mi", "kg", "lb", "c", "f"] }, "to": { "type": "string", "enum": ["km", "mi", "kg", "lb", "c", "f"] } }, "required": ["value", "from", "to"] },
+      "idempotent": true
+    }
+  ]
+}

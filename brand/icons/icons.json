@@ -1,0 +1,677 @@
+{
+  "grid": 24,
+  "stroke": 2,
+  "styles": [
+    "line",
+    "tint",
+    "tile"
+  ],
+  "groups": {
+    "nav": "Navigation",
+    "action": "Actions",
+    "status": "Status and safety",
+    "product": "Product",
+    "things": "Things"
+  },
+  "icons": [
+    {
+      "name": "chat",
+      "group": "nav",
+      "tags": [
+        "message",
+        "talk",
+        "bubble"
+      ]
+    },
+    {
+      "name": "files",
+      "group": "nav",
+      "tags": [
+        "folder",
+        "documents"
+      ]
+    },
+    {
+      "name": "packs",
+      "group": "nav",
+      "tags": [
+        "box",
+        "cube",
+        "add-on",
+        "bundle"
+      ]
+    },
+    {
+      "name": "agents",
+      "group": "nav",
+      "tags": [
+        "robot",
+        "helper",
+        "assistant"
+      ]
+    },
+    {
+      "name": "home",
+      "group": "nav",
+      "tags": [
+        "house",
+        "start"
+      ]
+    },
+    {
+      "name": "back",
+      "group": "nav",
+      "tags": [
+        "arrow",
+        "left",
+        "previous"
+      ]
+    },
+    {
+      "name": "forward",
+      "group": "nav",
+      "tags": [
+        "chevron",
+        "right",
+        "next"
+      ]
+    },
+    {
+      "name": "down",
+      "group": "nav",
+      "tags": [
+        "chevron",
+        "expand"
+      ]
+    },
+    {
+      "name": "up",
+      "group": "nav",
+      "tags": [
+        "chevron",
+        "collapse"
+      ]
+    },
+    {
+      "name": "close",
+      "group": "nav",
+      "tags": [
+        "x",
+        "dismiss",
+        "cancel"
+      ]
+    },
+    {
+      "name": "menu",
+      "group": "nav",
+      "tags": [
+        "hamburger",
+        "list"
+      ]
+    },
+    {
+      "name": "more",
+      "group": "nav",
+      "tags": [
+        "dots",
+        "overflow"
+      ]
+    },
+    {
+      "name": "profile",
+      "group": "nav",
+      "tags": [
+        "person",
+        "account",
+        "me"
+      ]
+    },
+    {
+      "name": "settings",
+      "group": "nav",
+      "tags": [
+        "sliders",
+        "preferences",
+        "options"
+      ]
+    },
+    {
+      "name": "send",
+      "group": "action",
+      "tags": [
+        "paper",
+        "plane",
+        "submit"
+      ]
+    },
+    {
+      "name": "mic",
+      "group": "action",
+      "tags": [
+        "voice",
+        "record",
+        "microphone"
+      ]
+    },
+    {
+      "name": "attach",
+      "group": "action",
+      "tags": [
+        "paperclip"
+      ]
+    },
+    {
+      "name": "camera",
+      "group": "action",
+      "tags": [
+        "photo",
+        "picture"
+      ]
+    },
+    {
+      "name": "search",
+      "group": "action",
+      "tags": [
+        "find",
+        "magnifier"
+      ]
+    },
+    {
+      "name": "plus",
+      "group": "action",
+      "tags": [
+        "add",
+        "new"
+      ]
+    },
+    {
+      "name": "minus",
+      "group": "action",
+      "tags": [
+        "remove",
+        "less"
+      ]
+    },
+    {
+      "name": "check",
+      "group": "action",
+      "tags": [
+        "done",
+        "tick",
+        "ok"
+      ]
+    },
+    {
+      "name": "share",
+      "group": "action",
+      "tags": [
+        "send",
+        "out",
+        "export"
+      ]
+    },
+    {
+      "name": "copy",
+      "group": "action",
+      "tags": [
+        "duplicate",
+        "clipboard"
+      ]
+    },
+    {
+      "name": "edit",
+      "group": "action",
+      "tags": [
+        "pencil",
+        "write",
+        "rename"
+      ]
+    },
+    {
+      "name": "trash",
+      "group": "action",
+      "tags": [
+        "delete",
+        "bin",
+        "remove"
+      ]
+    },
+    {
+      "name": "download",
+      "group": "action",
+      "tags": [
+        "save",
+        "get"
+      ]
+    },
+    {
+      "name": "upload",
+      "group": "action",
+      "tags": [
+        "put",
+        "send",
+        "file"
+      ]
+    },
+    {
+      "name": "refresh",
+      "group": "action",
+      "tags": [
+        "reload",
+        "sync",
+        "again"
+      ]
+    },
+    {
+      "name": "play",
+      "group": "action",
+      "tags": [
+        "run",
+        "start"
+      ]
+    },
+    {
+      "name": "pause",
+      "group": "action",
+      "tags": [
+        "hold"
+      ]
+    },
+    {
+      "name": "stop",
+      "group": "action",
+      "tags": [
+        "halt",
+        "square"
+      ]
+    },
+    {
+      "name": "pin",
+      "group": "action",
+      "tags": [
+        "keep",
+        "pinned"
+      ]
+    },
+    {
+      "name": "filter",
+      "group": "action",
+      "tags": [
+        "sort",
+        "narrow"
+      ]
+    },
+    {
+      "name": "logout",
+      "group": "action",
+      "tags": [
+        "sign",
+        "out",
+        "leave"
+      ]
+    },
+    {
+      "name": "alert",
+      "group": "status",
+      "tags": [
+        "warning",
+        "problem"
+      ]
+    },
+    {
+      "name": "info",
+      "group": "status",
+      "tags": [
+        "about",
+        "details"
+      ]
+    },
+    {
+      "name": "help",
+      "group": "status",
+      "tags": [
+        "question",
+        "support"
+      ]
+    },
+    {
+      "name": "lock",
+      "group": "status",
+      "tags": [
+        "private",
+        "secure"
+      ]
+    },
+    {
+      "name": "unlock",
+      "group": "status",
+      "tags": [
+        "open"
+      ]
+    },
+    {
+      "name": "key",
+      "group": "status",
+      "tags": [
+        "secret",
+        "token",
+        "password"
+      ]
+    },
+    {
+      "name": "shield",
+      "group": "status",
+      "tags": [
+        "protect",
+        "safe",
+        "permission"
+      ]
+    },
+    {
+      "name": "bell",
+      "group": "status",
+      "tags": [
+        "notification",
+        "alert",
+        "reminder"
+      ]
+    },
+    {
+      "name": "clock",
+      "group": "status",
+      "tags": [
+        "time",
+        "schedule"
+      ]
+    },
+    {
+      "name": "calendar",
+      "group": "status",
+      "tags": [
+        "date",
+        "day"
+      ]
+    },
+    {
+      "name": "bolt",
+      "group": "status",
+      "tags": [
+        "power",
+        "fast",
+        "energy"
+      ]
+    },
+    {
+      "name": "battery",
+      "group": "status",
+      "tags": [
+        "charge",
+        "level"
+      ]
+    },
+    {
+      "name": "wifi",
+      "group": "status",
+      "tags": [
+        "network",
+        "connection",
+        "signal"
+      ]
+    },
+    {
+      "name": "sun",
+      "group": "status",
+      "tags": [
+        "light",
+        "theme",
+        "day",
+        "weather"
+      ]
+    },
+    {
+      "name": "moon",
+      "group": "status",
+      "tags": [
+        "dark",
+        "theme",
+        "night"
+      ]
+    },
+    {
+      "name": "eye",
+      "group": "status",
+      "tags": [
+        "show",
+        "view"
+      ]
+    },
+    {
+      "name": "eye-off",
+      "group": "status",
+      "tags": [
+        "hide",
+        "private"
+      ]
+    },
+    {
+      "name": "activity",
+      "group": "status",
+      "tags": [
+        "pulse",
+        "log",
+        "history"
+      ]
+    },
+    {
+      "name": "cloud",
+      "group": "product",
+      "tags": [
+        "brand",
+        "mobile",
+        "cloud",
+        "sync"
+      ]
+    },
+    {
+      "name": "phone",
+      "group": "product",
+      "tags": [
+        "node",
+        "device",
+        "mobile"
+      ]
+    },
+    {
+      "name": "cluster",
+      "group": "product",
+      "tags": [
+        "devices",
+        "paired",
+        "group"
+      ]
+    },
+    {
+      "name": "link",
+      "group": "product",
+      "tags": [
+        "pair",
+        "connect",
+        "chain"
+      ]
+    },
+    {
+      "name": "server",
+      "group": "product",
+      "tags": [
+        "host",
+        "relay",
+        "computer"
+      ]
+    },
+    {
+      "name": "spark",
+      "group": "product",
+      "tags": [
+        "model",
+        "ai",
+        "magic",
+        "assistant"
+      ]
+    },
+    {
+      "name": "flow",
+      "group": "product",
+      "tags": [
+        "canvas",
+        "steps",
+        "workflow"
+      ]
+    },
+    {
+      "name": "tasks",
+      "group": "product",
+      "tags": [
+        "checklist",
+        "todo"
+      ]
+    },
+    {
+      "name": "channel",
+      "group": "product",
+      "tags": [
+        "broadcast",
+        "announce",
+        "messaging"
+      ]
+    },
+    {
+      "name": "voice",
+      "group": "product",
+      "tags": [
+        "wave",
+        "speak",
+        "listen"
+      ]
+    },
+    {
+      "name": "volume",
+      "group": "product",
+      "tags": [
+        "sound",
+        "speaker"
+      ]
+    },
+    {
+      "name": "wallet",
+      "group": "product",
+      "tags": [
+        "plan",
+        "payment",
+        "money"
+      ]
+    },
+    {
+      "name": "palette",
+      "group": "product",
+      "tags": [
+        "design",
+        "appearance",
+        "colors"
+      ]
+    },
+    {
+      "name": "code",
+      "group": "product",
+      "tags": [
+        "developer",
+        "script"
+      ]
+    },
+    {
+      "name": "note",
+      "group": "things",
+      "tags": [
+        "memo",
+        "text",
+        "page"
+      ]
+    },
+    {
+      "name": "file",
+      "group": "things",
+      "tags": [
+        "document",
+        "page"
+      ]
+    },
+    {
+      "name": "image",
+      "group": "things",
+      "tags": [
+        "picture",
+        "photo",
+        "gallery"
+      ]
+    },
+    {
+      "name": "mail",
+      "group": "things",
+      "tags": [
+        "email",
+        "message"
+      ]
+    },
+    {
+      "name": "place",
+      "group": "things",
+      "tags": [
+        "map",
+        "pin",
+        "location"
+      ]
+    },
+    {
+      "name": "globe",
+      "group": "things",
+      "tags": [
+        "web",
+        "world",
+        "internet"
+      ]
+    },
+    {
+      "name": "airplane",
+      "group": "things",
+      "tags": [
+        "flight",
+        "mode",
+        "travel"
+      ]
+    },
+    {
+      "name": "heart",
+      "group": "things",
+      "tags": [
+        "favorite",
+        "like"
+      ]
+    },
+    {
+      "name": "users",
+      "group": "things",
+      "tags": [
+        "people",
+        "group",
+        "contacts"
+      ]
+    },
+    {
+      "name": "wrench",
+      "group": "things",
+      "tags": [
+        "tool",
+        "fix"
+      ]
+    }
+  ]
+}

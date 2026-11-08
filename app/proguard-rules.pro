@@ -1,0 +1,8 @@
+-keep class com.pocketnode.core.** { *; }
+-keepclassmembers class **$$serializer { *; }
+-keepattributes *Annotation*, InnerClasses
+-dontwarn kotlinx.serialization.**
+-dontwarn sun.security.x509.**
+-dontwarn sun.security.**
+-keep class net.zetetic.database.** { *; }
+-keep class net.sqlcipher.** { *; }

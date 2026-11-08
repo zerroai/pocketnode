@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Notification icon: the Pocketnode ring and dot as one flat white shape (Android tints it). Same geometry as ic_splash. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <group android:scaleX="0.78" android:scaleY="0.78" android:pivotX="54" android:pivotY="54">
+        <path
+            android:pathData="M82.98,46.24 A30,30 0 1 1 61.76,25.02"
+            android:strokeColor="#FFFFFFFF"
+            android:strokeWidth="10"
+            android:strokeLineCap="round" />
+        <path
+            android:fillColor="#FFFFFFFF"
+            android:pathData="M67.21,32.79 a8,8 0 1 0 16,0 a8,8 0 1 0 -16,0" />
+    </group>
+</vector>

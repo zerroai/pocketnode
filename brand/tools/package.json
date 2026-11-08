@@ -1,0 +1,8 @@
+{
+  "name": "pocketnode-brand-tools",
+  "private": true,
+  "type": "module",
+  "description": "Build tools for the Pocketnode brand assets. Not shipped in the app.",
+  "scripts": { "build": "node build.mjs" },
+  "dependencies": { "@resvg/resvg-js": "2.6.2" }
+}

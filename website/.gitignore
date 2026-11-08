@@ -1,0 +1,11 @@
+node_modules/
+.next/
+out/
+next-env.d.ts
+tsconfig.tsbuildinfo
+# Copied from ../brand by scripts/copy-brand.mjs; brand/ is the only source (rule 7 in AGENTS.md).
+public/brand/
+public/favicon*
+src/fonts/
+src/styles/
+downloads/

@@ -1,0 +1,24 @@
+# One small machine: the relay plus Caddy, which gets and renews the TLS certificate by itself.
+# Put relay.env next to this file (see relay.env.example). Point your domain's DNS A record at the machine first.
+services:
+  relay:
+    image: pocketnode-relay
+    restart: unless-stopped
+    env_file: relay.env
+    volumes:
+      - relay-data:/data
+      - ./fcm-service-account.json:/secrets/fcm.json:ro
+    expose: ["8088"]
+  caddy:
+    image: caddy:2
+    restart: unless-stopped
+    ports: ["80:80", "443:443"]
+    environment:
+      RELAY_DOMAIN: ${RELAY_DOMAIN:?set RELAY_DOMAIN, for example relay.example.com}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+    depends_on: [relay]
+volumes:
+  relay-data:
+  caddy-data:

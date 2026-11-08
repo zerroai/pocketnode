@@ -1,0 +1,42 @@
+{
+  "id": "com.pocketnode.math",
+  "name": "Math and dates",
+  "version": "0.1.0",
+  "kind": "tool",
+  "summary": "Exact arithmetic, percentages and date calculations, so the assistant does not guess.",
+  "minCore": "0.1.0",
+  "hostApi": 1,
+  "permissions": {},
+  "tools": [
+    {
+      "name": "math.calc",
+      "description": "Evaluates an arithmetic expression exactly. Supports + - * / % ^ and parentheses, the constants pi and e, and sqrt, abs, round, floor, ceil, min, max, ln, log10, sin, cos, tan.",
+      "schema": { "type": "object", "properties": { "expression": { "type": "string", "description": "For example (12.5 * 8) / 3 + sqrt(16)" } }, "required": ["expression"] },
+      "idempotent": true
+    },
+    {
+      "name": "math.percent",
+      "description": "Percentage maths: what percent of a number is, or a number increased or decreased by a percent.",
+      "schema": { "type": "object", "properties": { "value": { "type": "number" }, "percent": { "type": "number" }, "op": { "type": "string", "enum": ["of", "increase", "decrease"], "description": "of: percent of value; increase or decrease: value changed by percent" } }, "required": ["value", "percent", "op"] },
+      "idempotent": true
+    },
+    {
+      "name": "date.diff",
+      "description": "Counts the days between two dates written YYYY-MM-DD.",
+      "schema": { "type": "object", "properties": { "from": { "type": "string" }, "to": { "type": "string" } }, "required": ["from", "to"] },
+      "idempotent": true
+    },
+    {
+      "name": "date.add",
+      "description": "Adds days (negative to subtract) to a date written YYYY-MM-DD and gives the new date and weekday.",
+      "schema": { "type": "object", "properties": { "date": { "type": "string" }, "days": { "type": "integer" } }, "required": ["date", "days"] },
+      "idempotent": true
+    },
+    {
+      "name": "date.weekday",
+      "description": "Gives the day of the week for a date written YYYY-MM-DD.",
+      "schema": { "type": "object", "properties": { "date": { "type": "string" } }, "required": ["date"] },
+      "idempotent": true
+    }
+  ]
+}

@@ -1,0 +1,80 @@
+{
+  "id": "com.pocketnode.reminders",
+  "name": "Reminders",
+  "version": "0.2.1",
+  "kind": "tool",
+  "summary": "Ask your assistant to remind you of something at a time you choose. It shows as a notification, even when the app is closed.",
+  "minCore": "0.1.0",
+  "hostApi": 1,
+  "permissions": {
+    "device": [
+      "reminder.add",
+      "reminder.list",
+      "reminder.cancel",
+      "owner.confirm"
+    ]
+  },
+  "tools": [
+    {
+      "name": "reminder.add",
+      "description": "Sets a reminder that shows as a notification on the phone at the chosen time, even when Pocketnode is closed. Give EXACTLY ONE of: `at` (the owner's local date and time, like 2026-10-20T15:00), `in_minutes`, or `time` (a clock time like 09:00, only together with `repeat`; the phone picks the next date itself). For anything that repeats daily, weekly or on weekdays, use `time` and `repeat`. A reminder happens once unless the owner used a word like every, daily, weekly, each or weekdays: never add `repeat` on your own. Use this when the owner says remind me, and use the alarm tool only when they ask for an alarm.",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "What to remind the owner about, in a few words"
+          },
+          "at": {
+            "type": "string",
+            "description": "Local date and time, YYYY-MM-DDTHH:mm"
+          },
+          "time": {
+            "type": "string",
+            "description": "Clock time HH:mm, only with repeat. The phone starts it at the next such time."
+          },
+          "in_minutes": {
+            "type": "integer",
+            "description": "Minutes from now, 1 to 525600"
+          },
+          "repeat": {
+            "description": "Leave out unless the owner asked for it to repeat (every day, each week, weekdays). Weekdays means Monday to Friday.",
+            "type": "string",
+            "enum": [
+              "daily",
+              "weekly",
+              "weekdays"
+            ]
+          }
+        },
+        "required": [
+          "text"
+        ]
+      }
+    },
+    {
+      "name": "reminder.list",
+      "description": "Lists the reminders waiting to go off, with their ids and times.",
+      "schema": {
+        "type": "object",
+        "properties": {}
+      },
+      "idempotent": true
+    },
+    {
+      "name": "reminder.cancel",
+      "description": "Cancels a reminder by its id (use reminder.list to find it).",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      }
+    }
+  ]
+}

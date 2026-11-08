@@ -1,0 +1,304 @@
+{
+  "id": "com.pocketnode.phone",
+  "name": "Phone controls",
+  "version": "0.2.1",
+  "kind": "tool",
+  "summary": "Let your assistant open apps, set alarms and timers, use the flashlight, control music and volume, start calls, texts and emails for you to send, and more.",
+  "minCore": "0.1.0",
+  "hostApi": 1,
+  "permissions": {
+    "device": [
+      "status",
+      "apps.list",
+      "apps.open",
+      "flashlight",
+      "media.control",
+      "alarm.set",
+      "timer.set",
+      "dial",
+      "sms.compose",
+      "email.compose",
+      "share.text",
+      "url.open",
+      "map.open",
+      "notify",
+      "speak",
+      "clipboard.set"
+    ]
+  },
+  "tools": [
+    {
+      "name": "phone.status",
+      "description": "Gets the phone's battery level, whether it is charging, the network, free storage, model, Android version and the local time.",
+      "schema": {
+        "type": "object",
+        "properties": {}
+      },
+      "idempotent": true
+    },
+    {
+      "name": "apps.list",
+      "description": "Lists the apps installed on the phone, optionally filtered by a word in the name.",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string"
+          },
+          "limit": {
+            "type": "integer"
+          }
+        }
+      },
+      "idempotent": true
+    },
+    {
+      "name": "apps.open",
+      "description": "Opens an app on the phone by its name, for example Camera, Chrome or WhatsApp. Only works while Pocketnode is on the screen.",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The app's name as shown on the home screen"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      }
+    },
+    {
+      "name": "phone.flashlight",
+      "description": "Turns the phone's flashlight on or off.",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "on": {
+            "type": "boolean",
+            "description": "true for on (default), false for off"
+          }
+        }
+      }
+    },
+    {
+      "name": "phone.media",
+      "description": "Plays, pauses or skips the music or video that is playing in another app, or changes the volume. It controls whatever player is active; it cannot choose a song.",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string",
+            "enum": [
+              "play",
+              "pause",
+              "play_pause",
+              "next",
+              "previous",
+              "stop",
+              "volume_up",
+              "volume_down"
+            ]
+          }
+        },
+        "required": [
+          "action"
+        ]
+      }
+    },
+    {
+      "name": "phone.alarm",
+      "description": "Sets an alarm at a time of day in the clock app.",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "hour": {
+            "type": "integer",
+            "description": "0 to 23"
+          },
+          "minute": {
+            "type": "integer",
+            "description": "0 to 59"
+          },
+          "label": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "hour"
+        ]
+      }
+    },
+    {
+      "name": "phone.timer",
+      "description": "Starts a countdown timer in the clock app.",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "seconds": {
+            "type": "integer",
+            "description": "1 to 86400"
+          },
+          "label": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "seconds"
+        ]
+      }
+    },
+    {
+      "name": "phone.call",
+      "description": "Opens the phone dialer with a number filled in. The owner presses the call button; nothing is dialled automatically.",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "number": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "number"
+        ]
+      }
+    },
+    {
+      "name": "phone.text",
+      "description": "Opens a text message to a number with the words filled in. The owner presses send; nothing is sent automatically.",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "number": {
+            "type": "string"
+          },
+          "text": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "number"
+        ]
+      }
+    },
+    {
+      "name": "phone.email",
+      "description": "Opens an email with the recipient, subject and body filled in. The owner presses send; nothing is sent automatically.",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "to": {
+            "type": "string"
+          },
+          "subject": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "phone.share",
+      "description": "Opens the share sheet with some text, so the owner can send it to any app, such as a notes app, Keep, or a chat.",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "text"
+        ]
+      }
+    },
+    {
+      "name": "phone.open_link",
+      "description": "Opens a web address in the phone's browser.",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "url"
+        ]
+      }
+    },
+    {
+      "name": "phone.map",
+      "description": "Opens a place or search in the maps app. Set directions to true when the owner asks how to get there: the maps app then shows a route from where the phone is.",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "description": "A place name or address"
+          },
+          "directions": {
+            "type": "boolean",
+            "description": "True to open directions to the place instead of showing it on the map"
+          }
+        },
+        "required": [
+          "query"
+        ]
+      }
+    },
+    {
+      "name": "phone.notify",
+      "description": "Shows a notification on the phone with a title and text, for example as a reminder.",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "text": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "text"
+        ]
+      }
+    },
+    {
+      "name": "phone.speak",
+      "description": "Reads some text out loud through the phone's speaker.",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "text"
+        ]
+      }
+    },
+    {
+      "name": "phone.copy",
+      "description": "Copies text to the clipboard so the owner can paste it anywhere.",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "text"
+        ]
+      }
+    }
+  ]
+}

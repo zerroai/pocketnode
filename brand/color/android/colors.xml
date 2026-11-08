@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="mc_background">#FFFFFF</color>
+    <color name="mc_grouped">#F2F3F5</color>
+    <color name="mc_surface">#FFFFFF</color>
+    <color name="mc_fill">#F0F1F3</color>
+    <color name="mc_pressed">#E3E5E9</color>
+    <color name="mc_separator">#E1E3E7</color>
+    <color name="mc_text">#0A0A0C</color>
+    <color name="mc_text_secondary">#5B5F69</color>
+    <color name="mc_text_tertiary">#686D77</color>
+    <color name="mc_accent">#17181C</color>
+    <color name="mc_on_accent">#F5F6F8</color>
+    <color name="mc_success">#1F7A44</color>
+    <color name="mc_warning">#8A5A00</color>
+    <color name="mc_error">#C4122F</color>
+    <color name="mc_info">#3A5BA0</color>
+    <color name="mc_silver50">#F5F6F8</color>
+    <color name="mc_silver100">#E8EAEE</color>
+    <color name="mc_silver200">#D5D8DE</color>
+    <color name="mc_silver300">#BFC3CB</color>
+    <color name="mc_silver400">#A5A9B2</color>
+    <color name="mc_silver500">#8A8F99</color>
+    <color name="mc_silver600">#6B707A</color>
+    <color name="mc_graphite800">#2A2C32</color>
+    <color name="mc_graphite900">#17181C</color>
+    <color name="mc_black">#0A0A0C</color>
+</resources>

@@ -1,0 +1,123 @@
+{
+  "id": "com.pocketnode.notes",
+  "name": "Notes and to-dos",
+  "version": "0.2.0",
+  "kind": "tool",
+  "summary": "Your assistant can remember notes and keep a to-do list. Everything stays on this phone.",
+  "minCore": "0.1.0",
+  "hostApi": 1,
+  "permissions": {
+    "device": [
+      "owner.confirm"
+    ]
+  },
+  "tools": [
+    {
+      "name": "notes.add",
+      "description": "Saves a note for the user to find later. Returns the note's id.",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "text"
+        ]
+      }
+    },
+    {
+      "name": "notes.list",
+      "description": "Lists the saved notes, newest first.",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "limit": {
+            "type": "integer",
+            "description": "Default 20"
+          }
+        }
+      },
+      "idempotent": true
+    },
+    {
+      "name": "notes.search",
+      "description": "Finds saved notes that contain the given words.",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "query"
+        ]
+      },
+      "idempotent": true
+    },
+    {
+      "name": "notes.delete",
+      "description": "Deletes a saved note by its id.",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      }
+    },
+    {
+      "name": "todo.add",
+      "description": "Adds an item to the to-do list. An optional due date looks like 2026-12-31.",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string"
+          },
+          "due": {
+            "type": "string",
+            "description": "YYYY-MM-DD"
+          }
+        },
+        "required": [
+          "text"
+        ]
+      }
+    },
+    {
+      "name": "todo.list",
+      "description": "Lists the to-do items. By default only the ones not done yet.",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "includeDone": {
+            "type": "boolean"
+          }
+        }
+      },
+      "idempotent": true
+    },
+    {
+      "name": "todo.done",
+      "description": "Marks a to-do item as done by its id.",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      }
+    }
+  ]
+}

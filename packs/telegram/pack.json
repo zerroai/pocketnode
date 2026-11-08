@@ -1,0 +1,10 @@
+{
+  "id": "com.pocketnode.telegram",
+  "name": "Telegram",
+  "version": "0.3.0",
+  "kind": "channel",
+  "summary": "Chat with your assistant through a Telegram bot.",
+  "minCore": "0.1.0",
+  "hostApi": 1,
+  "permissions": { "net": ["api.telegram.org"], "secret": ["bot_token"] }
+}
