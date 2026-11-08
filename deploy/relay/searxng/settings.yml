@@ -1,0 +1,10 @@
+# SearXNG for the web app. Only the web app container can reach it (no published port), so the limiter is off.
+use_default_settings: true
+server:
+  limiter: false
+  image_proxy: false
+search:
+  safe_search: 1
+  formats:
+    - html
+    - json

@@ -8,8 +8,16 @@ services:
     volumes:
       - relay-data:/data
     expose: ["8088"]
+  searxng:
+    image: searxng/searxng
+    restart: unless-stopped
+    env_file: searxng.env
+    volumes:
+      - ./searxng/settings.yml:/etc/searxng/settings.yml:ro
+    expose: ["8080"]
   webapp:
     build: ./webapp
+    depends_on: [searxng]
     restart: unless-stopped
     env_file: webapp.env
     volumes:
