@@ -24,6 +24,11 @@ input{width:100%;font:inherit;padding:12px 14px;border-radius:12px;border:1px so
 .open{align-self:flex-start;background:var(--card);border:1px solid var(--green);color:var(--green);border-radius:12px;padding:8px 14px;text-decoration:none;font-weight:600;word-break:break-all}
 .try{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 16px}.try button{background:var(--alt);border:1px solid var(--line);border-radius:999px;padding:8px 14px;color:var(--ink)}
 form.send{position:sticky;bottom:0;background:var(--paper);padding:10px 0 16px;display:flex;gap:8px}form.send input{margin:0;flex:1}
+.box{align-self:stretch;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--card)}
+.box .bar{display:flex;justify-content:space-between;gap:10px;padding:8px 14px;border-bottom:1px solid var(--line);font-size:14px}.box .bar b{font-weight:600}.box .bar span{color:var(--muted)}
+.box iframe{display:block;width:100%;height:340px;border:0;background:#fff}
+.box .out{padding:8px 14px;font:13px/1.5 ui-monospace,Menlo,monospace;color:var(--muted);border-top:1px solid var(--line);max-height:130px;overflow:auto}
+.box .out .blocked{color:var(--amber);font-weight:600}.box .out .error{color:#B3402A}
 .hint{color:var(--muted);font-size:13px;text-align:center;padding-bottom:12px}[hidden]{display:none!important}
 </style>
 </head>
@@ -41,34 +46,62 @@ form.send{position:sticky;bottom:0;background:var(--paper);padding:10px 0 16px;d
   </section>
   <section id="chat" hidden style="flex:1;display:flex;flex-direction:column">
     <div id="log">
-      <div class="m bot">Hi. Ask me to look something up, read a page, or open a site in a new tab.</div>
+      <div class="m bot">Hi. I work inside your browser. I can search the web, open pages in new tabs, and write and run code live in a locked frame right here. Try one below.</div>
       <div class="try" id="try"></div>
     </div>
-    <div class="hint" id="hint"></div>
+    <div class="hint"><span id="hint"></span> <button class="link" id="fresh">New chat</button></div>
     <form class="send" id="form"><input id="msg" placeholder="Ask me anything" autocomplete="off" maxlength="2000"><button class="btn" id="send">Send</button></form>
   </section>
 </main>
 <script>
-const $=id=>document.getElementById(id);let signup=true,history=[],busy=false;
+const $=id=>document.getElementById(id);let signup=true,busy=false;
 const api=async(p,b)=>{const r=await fetch(p,b?{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)}:{});let j={};try{j=await r.json()}catch(e){}return{ok:r.ok,j}};
 function mode(){$('go').textContent=signup?'Sign up':'Log in';$('swap').textContent=signup?'I already have an account':'Create an account';$('authTitle').textContent=signup?'Try Pocketnode':'Welcome back'}
 function show(user,limit){$('auth').hidden=!!user;$('chat').hidden=!user;$('who').innerHTML=user?user+' · <button class="link" id="out">Log out</button>':'';if(user){$('hint').textContent=limit+' messages a day per account.';$('out').onclick=async()=>{await api('/api/logout',{});location.reload()};$('msg').focus()}}
 $('swap').onclick=()=>{signup=!signup;mode()};
 $('go').onclick=async()=>{$('err').textContent='';$('go').disabled=true;const {ok,j}=await api(signup?'/api/signup':'/api/login',{email:$('email').value,password:$('pw').value});$('go').disabled=false;if(ok){const m=await api('/api/me');show(j.user,m.j.limit)}else $('err').textContent=j.error||'Something went wrong.'};
 $('pw').addEventListener('keydown',e=>{if(e.key==='Enter')$('go').click()});
-const examples=['Search the web for Vultr serverless inference and open the top result','What is the capital of Nigeria? Search to confirm','Read https://example.com and summarise it'];
-examples.forEach(t=>{const b=document.createElement('button');b.textContent=t;b.onclick=()=>{$('msg').value=t;$('form').requestSubmit()};$('try').appendChild(b)});
-function add(cls,text){const d=document.createElement('div');d.className='m '+cls;d.textContent=text;$('log').insertBefore(d,null);d.scrollIntoView({block:'end'});return d}
+const examples=['Build me a 5-minute pomodoro timer I can use right now','Draw an animated chart of the Fibonacci sequence','Sandbox test: write code that tries to read this page\'s cookies and call another website, then tell me what was blocked','Search the web for Vultr serverless inference and open the top result in a new tab'];
+examples.forEach(t=>{const b=document.createElement('button');b.textContent=t.length>60?t.slice(0,57)+'…':t;b.onclick=()=>{$('msg').value=t;$('form').requestSubmit()};$('try').appendChild(b)});
+function add(cls,text){const d=document.createElement('div');d.className='m '+cls;d.textContent=text;$('log').appendChild(d);d.scrollIntoView({block:'end'});return d}
+function chip(label,ok){const c=document.createElement('div');c.className='chips';const x=document.createElement('span');x.className='chip'+(ok===false?' bad':'');x.innerHTML='<i></i>';x.append(label);c.appendChild(x);$('log').appendChild(c);c.scrollIntoView({block:'end'})}
+let convo=[],sid=0;
+const CSP='<meta http-equiv="Content-Security-Policy" content="default-src \'none\'; script-src \'unsafe-inline\'; style-src \'unsafe-inline\'; img-src data: blob:; media-src data:">';
+const BRIDGE='<script>(function(){var id="__ID__";function send(k,t){try{parent.postMessage({pn:id,k:k,t:String(t).slice(0,500)},"*")}catch(e){}}'
+ +'["log","info","warn","error"].forEach(function(k){var o=console[k];console[k]=function(){send(k,[].map.call(arguments,function(a){try{return typeof a==="object"?JSON.stringify(a):String(a)}catch(e){return String(a)}}).join(" "));try{o&&o.apply(console,arguments)}catch(e){}}});'
+ +'addEventListener("error",function(e){send("error",e.message)});addEventListener("unhandledrejection",function(e){send("error","Unhandled: "+(e.reason&&e.reason.message||e.reason))});'
+ +'document.addEventListener("securitypolicyviolation",function(e){send("blocked",e.violatedDirective+" blocked "+(e.blockedURI||"inline"))});})()<\/script>';
+function wrap(html,id){const inj=CSP+BRIDGE.replace('__ID__',id);const m=/^\s*<!doctype[^>]*>/i.exec(html);return m?m[0]+inj+html.slice(m[0].length):inj+html}
+function runCode(title,html){return new Promise(res=>{
+  const id='f'+(++sid)+Math.random().toString(36).slice(2);const box=document.createElement('div');box.className='box';
+  box.innerHTML='<div class="bar"><b></b><span>Locked frame: no network, no cookies, no access to this page</span></div>';box.querySelector('b').textContent=title||'Program';
+  const f=document.createElement('iframe');f.setAttribute('sandbox','allow-scripts');f.srcdoc=wrap(String(html||''),id);box.appendChild(f);
+  const out=document.createElement('div');out.className='out';out.hidden=true;box.appendChild(out);$('log').appendChild(box);box.scrollIntoView({block:'end'});
+  const logs=[],errors=[],blocked=[];
+  const on=e=>{if(e.source!==f.contentWindow||!e.data||e.data.pn!==id)return;const {k,t}=e.data;out.hidden=false;const l=document.createElement('div');l.className=k==='blocked'?'blocked':k==='error'?'error':'';l.textContent=(k==='blocked'?'Blocked: ':k==='error'?'Error: ':'')+t;out.appendChild(l);out.scrollTop=out.scrollHeight;(k==='blocked'?blocked:k==='error'?errors:logs).push(t)};
+  addEventListener('message',on);
+  setTimeout(()=>{res({ok:errors.length===0,logs:logs.slice(0,20),errors:errors.slice(0,10),blocked_by_sandbox:blocked.slice(0,10),note:'The program is running in the frame. It cannot use the network, cookies or the page around it.'})},2000)})}
+async function exec(name,args){
+  if(['web_search','web_read','now'].includes(name)){const {ok,j}=await api('/api/tool',{name,args});chip((name==='web_search'?'Searched: '+(args.query||''):name==='web_read'?'Read a page':'Checked the time')+(j.error?' · '+j.error:j.results?' · '+j.results.length+' results':''),!j.error);return ok?j:{error:j.error||'failed'}}
+  if(name==='open_tab'){const url=String(args.url||'');if(!/^https?:\/\/\S+$/.test(url))return{error:'Not a web address.'};const w=window.open(url,'_blank','noopener');const l=document.createElement('a');l.className='open';l.href=url;l.target='_blank';l.rel='noopener noreferrer';l.textContent=(w?'Opened in a new tab: ':'Open in a new tab: ')+url;$('log').appendChild(l);l.scrollIntoView({block:'end'});return{ok:true,opened:!!w,note:w?'Opened.':'The browser blocked the popup; a link was shown to the user.'}}
+  if(name==='run_code'){chip('Running code: '+(args.title||'program'));return runCode(args.title,args.html)}
+  if(name==='speak'){try{speechSynthesis.cancel();speechSynthesis.speak(new SpeechSynthesisUtterance(String(args.text||'').slice(0,500)));chip('Speaking');return{ok:true}}catch(e){return{error:'Speech is not available here.'}}}
+  if(name==='download_file'){const fn=String(args.filename||'file.txt').replace(/[^\w.\- ]/g,'_').slice(0,80);const url=URL.createObjectURL(new Blob([String(args.content||'')],{type:'text/plain'}));const l=document.createElement('a');l.className='open';l.href=url;l.download=fn;l.textContent='Save '+fn;$('log').appendChild(l);l.scrollIntoView({block:'end'});return{ok:true,note:'A save link was shown to the user.'}}
+  return{error:'Unknown tool.'}}
 $('form').onsubmit=async e=>{e.preventDefault();const t=$('msg').value.trim();if(!t||busy)return;busy=true;$('send').disabled=true;$('msg').value='';$('try').hidden=true;
-  add('me',t);history.push({role:'user',content:t});const wait=add('bot','Working on it…');
-  const {ok,j}=await api('/api/chat',{messages:history});wait.remove();
-  if(!ok){if(ok===false&&j.error==='Log in first.'){location.reload()}add('bot',j.error||'Something went wrong.')}
-  else{
-    if(j.steps&&j.steps.length){const c=document.createElement('div');c.className='chips';j.steps.forEach(s=>{const x=document.createElement('span');x.className='chip'+(s.ok?'':' bad');x.innerHTML='<i></i>';x.append((s.tool==='web_search'?'Searched: '+(s.args.query||''):s.tool==='web_read'?'Read a page':s.tool==='open_tab'?'Opened a tab':'Checked the time')+' · '+s.summary);c.appendChild(x)});$('log').appendChild(c)}
-    add('bot',j.reply||'(no reply)');history.push({role:'assistant',content:j.reply||''});
-    (j.actions||[]).filter(a=>a.type==='open').forEach(a=>{const w=window.open(a.url,'_blank','noopener');const l=document.createElement('a');l.className='open';l.href=a.url;l.target='_blank';l.rel='noopener noreferrer';l.textContent=(w?'Opened in a new tab: ':'Open in a new tab: ')+a.url;$('log').appendChild(l)});
-    $('log').lastElementChild.scrollIntoView({block:'end'})}
-  busy=false;$('send').disabled=false;$('msg').focus()};
+  add('me',t);convo.push({role:'user',content:t});const wait=add('bot','Working on it…');
+  try{for(let i=0;i<8;i++){
+    const {ok,j}=await api('/api/step',{messages:convo});wait.remove();
+    if(!ok){if(j.error==='Log in first.'){location.reload();return}add('bot',j.error||'Something went wrong.');convo.pop();break}
+    const m=j.message;convo.push(m);if(m.content)add('bot',m.content);
+    if(!m.tool_calls||!m.tool_calls.length)break;
+    for(const c of m.tool_calls){let args={};try{args=JSON.parse(c.function.arguments||'{}')}catch(_){}
+      let r;try{r=await exec(c.function.name,args)}catch(err){r={error:String(err).slice(0,120)}}
+      convo.push({role:'tool',tool_call_id:c.id,content:JSON.stringify(r).slice(0,8000)})}
+    if(i===7)add('bot','I stopped after several steps. Ask me to continue if you want more.')}}
+  catch(err){add('bot','Something went wrong. Try again.')}
+  wait.remove();busy=false;$('send').disabled=false;$('msg').focus()};
+$('fresh').onclick=()=>{convo=[];$('log').querySelectorAll('.m.me,.m.bot:not(:first-child),.chips,.box,.open').forEach(n=>n.remove());$('try').hidden=false};
 mode();api('/api/me').then(({j})=>show(j.user,j.limit)).catch(()=>show(null));
 </script>
 </body>
