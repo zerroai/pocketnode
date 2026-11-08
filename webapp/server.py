@@ -409,7 +409,10 @@ class H(BaseHTTPRequestHandler):
                     return self.send(429, {"error": "The demo has reached its daily limit. Try again tomorrow."})
                 q("INSERT INTO usage VALUES (?,?,1) ON CONFLICT(day,user_id) DO UPDATE SET n=n+1", (day, u["id"]), commit=True)
             try:
-                m = model_call([{"role": "system", "content": BROWSER_SYSTEM}] + clean, BROWSER_TOOLS, 6000)
+                rules = d.get("rules")
+                rules = rules.strip()[:1200] if isinstance(rules, str) else ""
+                system = BROWSER_SYSTEM + (("\n\nThe user set these rules for you. Follow them strictly. If a request would break a rule, do not do it and say which rule stops you.\n" + rules) if rules else "")
+                m = model_call([{"role": "system", "content": system}] + clean, BROWSER_TOOLS, 6000)
                 return self.send(200, {"message": {"role": "assistant", "content": m.get("content") or "", **({"tool_calls": m["tool_calls"]} if m.get("tool_calls") else {})}})
             except Exception as e:
                 return self.send(502, {"error": "The model did not answer. Try again.", "detail": clip(str(e), 120)})

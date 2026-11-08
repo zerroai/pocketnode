@@ -66,6 +66,8 @@ Build the Android app:
 
 On the first screen choose the Vultr preset and paste your Vultr Serverless Inference key. The key stays on the phone.
 
+Longer write-up: [docs/architecture-and-business-case.md](docs/architecture-and-business-case.md).
+
 ## Security notes
 
 - The model's output is never run by the server. Programs run only in the visitor's own browser, in the locked frame.

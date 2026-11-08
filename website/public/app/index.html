@@ -108,7 +108,7 @@ const PACKS=[['web','globe','Web','Search the web and read pages.'],['tabs','tab
 const TOOLPACK={web_search:'web',web_read:'web',open_tab:'tabs',run_code:'code',speak:'voice',download_file:'files'};
 const IDEAS=[['Build me a 5-minute pomodoro timer I can use right now','Pomodoro timer'],['Draw an animated chart of the Fibonacci sequence','Animated chart'],['Containment test: write code that tries to read this page\'s cookies and storage, call another website, open a popup, and then run an infinite loop. Tell me what the sandbox blocked or stopped.','Containment test'],['Search the web for the Vultr Serverless Inference docs and open the docs page in a new tab','Search and open a tab']];
 const key=()=>'pn:'+user;
-function load(){let d={};try{d=JSON.parse(localStorage.getItem(key())||'{}')}catch(e){}S=Object.assign({threads:[],files:[],agents:[],canvases:[],activity:[],packs:{web:1,tabs:1,code:1,voice:1,files:1},on:true,onboarded:false,theme:'auto'},d);if(!S.agents.length&&!d.onboarded)S.agents=IDEAS.slice(0,3).map(([p,n])=>({id:uid(),name:n,prompt:p}));applyTheme()}
+function load(){let d={};try{d=JSON.parse(localStorage.getItem(key())||'{}')}catch(e){}S=Object.assign({threads:[],files:[],agents:[],canvases:[],activity:[],packs:{web:1,tabs:1,code:1,voice:1,files:1},on:true,onboarded:false,theme:'auto',rules:'',blocked:''},d);if(!S.agents.length&&!d.onboarded)S.agents=IDEAS.slice(0,3).map(([p,n])=>({id:uid(),name:n,prompt:p}));applyTheme()}
 function save(){try{localStorage.setItem(key(),JSON.stringify(S))}catch(e){toast('Browser storage is full. Delete some chats or files.')}}
 function applyTheme(){const t=S?S.theme:'auto';if(t==='auto')document.documentElement.removeAttribute('data-theme');else document.documentElement.setAttribute('data-theme',t)}
 const logA=(tool,detail,ok=true)=>{S.activity.unshift({t:Date.now(),tool,detail:String(detail||'').slice(0,160),ok});S.activity.length=Math.min(S.activity.length,150);save()};
@@ -171,6 +171,8 @@ settings:()=>`<div class="scr g">${bar('',{back:true})}<div class="body"><h1 cla
 <div class="list"><div class="row" style="cursor:default"><div class="av">${ic('user')}</div><div class="g1"><span class="a">${esc(user)}</span><div class="b">${limit} messages a day on this account</div></div></div></div>
 <p class="sec">Assistant</p><div class="list"><button class="row" id="onoff" data-tour="settings_assistant"><div class="g1"><span class="a">Assistant is ${S.on?'on':'off'}</span><div class="b">Switch it off and nothing runs. While it works, a Stop button shows in chats.</div></div><span class="sw ${S.on?'on':''}"></span></button>
 <button class="row" id="act" data-tour="settings_activity"><div class="g1"><span class="a">Activity</span><div class="b">Every tool it used, kept in this browser</div></div><span class="ch">${ic('chev',18)}</span></button></div>
+<p class="sec">Rules</p><div class="pad"><label class="lbl" for="rl">Things the agent must always or never do</label><textarea class="f" id="rl" rows="3" maxlength="600" placeholder="Never open more than one tab. Keep answers under three sentences.">${esc(S.rules)}</textarea>
+<label class="lbl" for="bs">Blocked sites</label><input class="f" id="bs" maxlength="200" placeholder="example.com, news.example.org" value="${esc(S.blocked)}"></div><p class="foot">Rules are sent with every request. Blocked sites are refused by this page itself, whatever the agent asks.</p>
 <p class="sec">Appearance</p><div class="seg">${['auto','light','dark'].map(x=>`<button data-th="${x}" class="${S.theme===x?'on':''}">${x[0].toUpperCase()+x.slice(1)}</button>`).join('')}</div>
 <p class="sec">Help</p><div class="list"><button class="row" id="tour"><div class="av">${ic('help')}</div><div class="g1"><span class="a">Take the tour</span></div><span class="ch">${ic('chev',18)}</span></button>
 <a class="row" href="/downloads/pocketnode.apk" style="text-decoration:none;color:inherit"><div class="av">${ic('files')}</div><div class="g1"><span class="a">Get the Android app</span><div class="b">The same assistant, with your phone's tools</div></div><span class="ch">${ic('chev',18)}</span></a></div>
@@ -202,7 +204,7 @@ account:t=>{$('#swap').onclick=()=>{nav[nav.length-1].signup=!t.signup;render()}
 finish:()=>{$('#test').onclick=async()=>{const o=$('#testout');o.style.color='';o.textContent='Checking the connection…';const {ok,j}=await api('/api/step',{messages:[{role:'user',content:'Reply with the single word: ready'}]});o.textContent=ok?'Connected. The model answered.':(j.error||'Could not reach the model.');o.style.color=ok?'':'var(--err)'};
  $('#fin').onclick=()=>{S.onboarded=true;save();tab=0;reset('main');setTimeout(startTour,400)}},
 main:()=>{drawTab();$$('[data-tab]').forEach(b=>b.onclick=()=>{tab=+b.dataset.tab;render()})},
-settings:()=>{$('#onoff').onclick=()=>{S.on=!S.on;save();render()};$('#act').onclick=()=>go('activity');
+settings:()=>{$('#rl').oninput=e=>{S.rules=e.target.value;save()};$('#bs').oninput=e=>{S.blocked=e.target.value;save()};$('#onoff').onclick=()=>{S.on=!S.on;save();render()};$('#act').onclick=()=>go('activity');
  $$('[data-th]').forEach(b=>b.onclick=()=>{S.theme=b.dataset.th;applyTheme();save();render()});
  $('#tour').onclick=()=>{tab=0;reset('main');setTimeout(startTour,300)};
  $('#wipe').onclick=()=>{if(confirm('Delete every chat, file, agent and canvas from this browser?')){localStorage.removeItem(key());load();save();toast('Deleted');tab=0;reset('main')}};
@@ -247,7 +249,11 @@ function node(it){const L=$('#log');if(!L)return null;const hl=L.querySelector('
    if(Date.now()-res.last>4000){clearInterval(wd);f.remove();out.hidden=false;const l=document.createElement('div');l.className='error';l.textContent='Stopped: the program stopped responding for 4 seconds (an infinite loop?). The frame was removed. This page is fine.';out.appendChild(l);res.errors.push('Stopped by the watchdog: the program froze (infinite loop). Frame removed.');res.stopped=true}},1000)}
  L.appendChild(n);n.scrollIntoView({block:'end'});return n}
 function add(it){if(TH.draft){delete TH.draft;S.threads.push(TH);refreshSide();const tb=$('.pane .top b,.scr>.top b');if(tb)tb.textContent=TH.title}const stored=it.t==='code'?{t:'code',title:it.title,html:it.html}:it;TH.items.push(stored);const n=node(it);TH.updated=Date.now();save();return n}
+const blockedList=()=>String(S.blocked||'').split(/[,\s]+/).map(x=>x.trim().toLowerCase().replace(/^https?:\/\//,'').replace(/\/.*$/,'')).filter(Boolean);
+function isBlocked(u){try{const h=new URL(u).hostname.toLowerCase();return blockedList().find(d=>h===d||h.endsWith('.'+d))||null}catch(e){return null}}
+const rulesText=()=>[S.rules.trim(),blockedList().length?'Never search for, read or open pages on these sites: '+blockedList().join(', ')+'.':''].filter(Boolean).join('\n');
 async function exec(name,args){
+ if((name==='open_tab'||name==='web_read')&&isBlocked(args.url)){const d=isBlocked(args.url);add({t:'chip',x:'Blocked by your rules: '+d,bad:true});logA(name,'blocked by rule: '+d,false);return{error:'The user blocked '+d+' in their rules. Do not open or read it.'}}
  const pk=TOOLPACK[name];if(pk&&!S.packs[pk]){add({t:'chip',x:'Skipped '+name+' (pack is off)',bad:true});logA(name,'pack is off',false);return{error:'That pack is switched off by the user.'}}
  if(name==='web_search'||name==='web_read'||name==='now'){const {ok,j}=await api('/api/tool',{name,args});const lbl=name==='web_search'?'Searched: '+(args.query||''):name==='web_read'?'Read '+String(args.url||'a page').slice(0,60):'Checked the time';add({t:'chip',x:lbl+(j.error?' · '+j.error:j.results?' · '+j.results.length+' results':''),bad:!!j.error});logA(name,args.query||args.url||'',!j.error);return ok?j:{error:j.error||'failed'}}
  if(name==='open_tab'){const url=String(args.url||'');if(!/^https?:\/\/\S+$/.test(url))return{error:'Not a web address.'};const w=window.open(url,'_blank','noopener');add({t:'open',u:url,opened:!!w});logA('open_tab',url);return{ok:true,opened:!!w,note:w?'Opened.':'The browser blocked the popup; a link was shown to the user.'}}
@@ -260,7 +266,7 @@ async function sendMsg(t){if(busy||!t.trim())return;if(!S.on){toast('The assista
  if(TH.title==='New chat')TH.title=t.slice(0,40);TH.preview=t.slice(0,80);add({t:'me',x:t});TH.convo.push({role:'user',content:t});
  const wait=document.createElement('div');wait.className='m bot';wait.textContent='Working on it…';$('#log').appendChild(wait);wait.scrollIntoView({block:'end'});
  try{for(let i=0;i<8&&!stopFlag;i++){
-   const {ok,j}=await api('/api/step',{messages:TH.convo.slice(-40)});wait.remove();
+   const {ok,j}=await api('/api/step',{messages:TH.convo.slice(-40),rules:rulesText()});wait.remove();
    if(!ok){if(j.error==='Log in first.'){location.reload();return}add({t:'bot',x:j.error||'Something went wrong.'});TH.convo.pop();break}
    const m=j.message;TH.convo.push(m);if(m.content)add({t:'bot',x:m.content});else if(!(m.tool_calls&&m.tool_calls.length))add({t:'bot',x:'I did not get an answer back. Please try again.'});
    if(!m.tool_calls||!m.tool_calls.length)break;
