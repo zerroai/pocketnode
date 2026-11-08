@@ -2,107 +2,258 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Pocketnode Web</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Pocketnode</title>
+<meta name="theme-color" content="#FFFFFF">
 <link rel="icon" href="/favicon.svg">
 <style>
-:root{--paper:#F6F1E7;--card:#FFFBF2;--ink:#1B2A24;--muted:#5C6A62;--green:#1F5C45;--on:#F6F1E7;--amber:#C8782D;--line:#E2D9C6;--alt:#EFE8D8;--serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif}
-@media (prefers-color-scheme:dark){:root{--paper:#14201B;--card:#1B2B24;--ink:#EDE7D8;--muted:#9FB0A6;--green:#7CC4A0;--on:#14201B;--amber:#E39A56;--line:#2A3D34;--alt:#182720}}
-*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;min-height:100vh;display:flex;flex-direction:column}
-header{display:flex;justify-content:space-between;align-items:center;padding:12px 20px;border-bottom:1px solid var(--line)}
-header a.brand{font:600 20px var(--serif);color:var(--green);text-decoration:none}header span{color:var(--muted);font-size:14px}
-button{font:inherit;cursor:pointer}.btn{background:var(--green);color:var(--on);border:0;border-radius:999px;padding:10px 20px;font-weight:600}.btn:disabled{opacity:.5}
-.link{background:none;border:0;color:var(--muted);text-decoration:underline;padding:0}
-main{flex:1;width:100%;max-width:760px;margin:0 auto;padding:20px;display:flex;flex-direction:column}
-.auth{margin:8vh auto 0;width:100%;max-width:380px;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:28px}
-.auth h1{font:600 28px var(--serif);margin:0 0 6px}.auth p{color:var(--muted);margin:0 0 18px}
-input{width:100%;font:inherit;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:var(--paper);color:var(--ink);margin-bottom:10px}
-.err{color:#B3402A;min-height:1.3em;font-size:14px;margin:4px 0 10px}@media (prefers-color-scheme:dark){.err{color:#F08A74}}
-#log{flex:1;display:flex;flex-direction:column;gap:12px;padding-bottom:12px}
-.m{max-width:88%;padding:10px 15px;border-radius:18px;white-space:pre-wrap;word-wrap:anywhere}.me{align-self:flex-end;background:var(--green);color:var(--on)}.bot{align-self:flex-start;background:var(--card);border:1px solid var(--line)}
-.chips{align-self:flex-start;display:flex;gap:6px;flex-wrap:wrap}.chip{font-size:13px;color:var(--muted);border:1px solid var(--line);border-radius:10px;padding:3px 10px;display:flex;gap:6px;align-items:center}.chip i{width:7px;height:7px;border-radius:50%;background:var(--amber);display:inline-block}.chip.bad i{background:#B3402A}
-.open{align-self:flex-start;background:var(--card);border:1px solid var(--green);color:var(--green);border-radius:12px;padding:8px 14px;text-decoration:none;font-weight:600;word-break:break-all}
-.try{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 16px}.try button{background:var(--alt);border:1px solid var(--line);border-radius:999px;padding:8px 14px;color:var(--ink)}
-form.send{position:sticky;bottom:0;background:var(--paper);padding:10px 0 16px;display:flex;gap:8px}form.send input{margin:0;flex:1}
-.box{align-self:stretch;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--card)}
-.box .bar{display:flex;justify-content:space-between;gap:10px;padding:8px 14px;border-bottom:1px solid var(--line);font-size:14px}.box .bar b{font-weight:600}.box .bar span{color:var(--muted)}
+:root{--bg:#FFFFFF;--grouped:#F2F3F5;--surface:#FFFFFF;--fill:#F0F1F3;--pressed:#E3E5E9;--sep:#E1E3E7;--text:#0A0A0C;--text2:#5B5F69;--text3:#686D77;--accent:#17181C;--on:#FFFFFF;--soft:rgba(0,0,0,.08);--err:#C4122F;--scrim:rgba(0,0,0,.45)}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0A0A0C;--grouped:#0A0A0C;--surface:#17181C;--fill:#1F2025;--pressed:#2A2C32;--sep:#2A2C32;--text:#F5F6F8;--text2:#A5A9B2;--text3:#8A8F99;--accent:#D5D8DE;--on:#0A0A0C;--soft:rgba(255,255,255,.14);--err:#FF6B7F;--scrim:rgba(0,0,0,.6)}}
+:root[data-theme=dark]{--bg:#0A0A0C;--grouped:#0A0A0C;--surface:#17181C;--fill:#1F2025;--pressed:#2A2C32;--sep:#2A2C32;--text:#F5F6F8;--text2:#A5A9B2;--text3:#8A8F99;--accent:#D5D8DE;--on:#0A0A0C;--soft:rgba(255,255,255,.14);--err:#FF6B7F;--scrim:rgba(0,0,0,.6)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;margin:0}body{background:var(--grouped);color:var(--text);font:16px/1.5 Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+button,input,textarea{font:inherit;color:inherit}button{cursor:pointer;background:none;border:0;padding:0}
+[hidden]{display:none!important}
+#app{position:relative;max-width:640px;height:100dvh;margin:0 auto;background:var(--bg);display:flex;flex-direction:column;overflow:hidden}
+@media (min-width:700px){#app{border-left:1px solid var(--sep);border-right:1px solid var(--sep)}}
+.scr{flex:1;min-height:0;display:flex;flex-direction:column;background:var(--bg)}.scr.g{background:var(--grouped)}
+.top{display:flex;align-items:center;justify-content:space-between;min-height:52px;padding:6px 8px}
+.ib{width:44px;height:44px;display:grid;place-items:center;border-radius:50%;color:var(--accent)}.ib:active{background:var(--pressed)}
+.body{flex:1;min-height:0;overflow:auto;padding-bottom:24px}
+h1.lt{font-size:34px;line-height:40px;font-weight:700;letter-spacing:-.9px;margin:0;padding:0 20px 10px}
+h2.t{font-size:22px;line-height:28px;font-weight:600;letter-spacing:-.4px;margin:0 0 6px}
+.sub{color:var(--text2);margin:0}
+.sec{font-size:13px;color:var(--text2);text-transform:uppercase;letter-spacing:.04em;padding:18px 20px 6px;margin:0}.foot{font-size:13px;color:var(--text2);padding:6px 20px 0;margin:0}
+.list{background:var(--surface);border-radius:14px;margin:0 16px;overflow:hidden}.scr:not(.g) .list{background:var(--fill)}
+.row{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:13px 16px;position:relative;min-height:52px}.row+.row::before{content:"";position:absolute;top:0;left:16px;right:0;border-top:1px solid var(--sep)}
+.row:active{background:var(--pressed)}.row .g1{flex:1;min-width:0}.row .a{font-weight:500}.row .b{font-size:14px;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.row .v{color:var(--text2);font-size:15px}.row .ch{color:var(--text3)}
+.av{width:36px;height:36px;border-radius:10px;background:var(--fill);display:grid;place-items:center;flex:none;color:var(--accent)}.scr.g .av{background:var(--grouped)}
+.btn{display:block;width:100%;background:var(--accent);color:var(--on);border-radius:14px;padding:15px 20px;font-weight:600;text-align:center}.btn:disabled{opacity:.45}.btn:active{opacity:.85}
+.btn.sec2{background:var(--fill);color:var(--text)}.txt{display:block;margin:12px auto 0;color:var(--text2);padding:8px}
+.pad{padding:0 20px}
+input.f,textarea.f{display:block;width:100%;background:var(--fill);border:1px solid transparent;border-radius:12px;padding:13px 14px;outline:0;margin:0 0 10px}input.f:focus,textarea.f:focus{border-color:var(--accent)}
+.lbl{display:block;font-size:13px;color:var(--text2);margin:0 0 6px 2px}.err{color:var(--err);font-size:14px;min-height:1.3em;margin:2px 2px 8px}
+.hero{flex:1;display:flex;flex-direction:column;justify-content:center;padding:24px;overflow:auto}.mark{width:76px;height:76px;border-radius:20px;background:var(--accent);color:var(--on);display:grid;place-items:center;margin:0 auto 18px}
+.feat{display:flex;gap:14px;margin:0 0 18px}.feat .av{background:var(--fill)}.feat b{display:block;font-weight:600}.feat span{color:var(--text2);font-size:15px}
+.tabs{display:flex;border-top:1px solid var(--sep);background:var(--bg);padding:6px 4px calc(6px + env(safe-area-inset-bottom))}.tabs button{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;color:var(--text3);font-size:11px;font-weight:500;padding:4px}.tabs button.on{color:var(--text)}
+.empty{text-align:center;color:var(--text2);padding:40px 30px}.empty .av{margin:0 auto 12px;width:56px;height:56px;border-radius:16px}
+#log{flex:1;min-height:0;overflow:auto;display:flex;flex-direction:column;gap:10px;padding:8px 16px 14px}
+.m{max-width:86%;padding:10px 15px;border-radius:20px;white-space:pre-wrap;overflow-wrap:anywhere}.m.me{align-self:flex-end;background:var(--accent);color:var(--on);border-bottom-right-radius:6px}.m.bot{align-self:flex-start;background:var(--fill);border-bottom-left-radius:6px}
+.chip{align-self:flex-start;font-size:13px;color:var(--text2);border:1px solid var(--sep);border-radius:10px;padding:3px 10px;display:flex;gap:6px;align-items:center}.chip i{width:7px;height:7px;border-radius:50%;background:var(--text3)}.chip.bad i{background:var(--err)}
+.open{align-self:flex-start;border:1px solid var(--accent);color:var(--text);border-radius:12px;padding:8px 14px;text-decoration:none;font-weight:600;overflow-wrap:anywhere}
+.box{align-self:stretch;border:1px solid var(--sep);border-radius:16px;overflow:hidden;background:var(--surface);flex:none}
+.box .bar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 12px 8px 14px;border-bottom:1px solid var(--sep);font-size:14px}.box .bar b{font-weight:600}.box .bar span{color:var(--text2);font-size:12px}.box .bar button{color:var(--text);text-decoration:underline;font-size:13px;flex:none}
 .box iframe{display:block;width:100%;height:340px;border:0;background:#fff}
-.box .out{padding:8px 14px;font:13px/1.5 ui-monospace,Menlo,monospace;color:var(--muted);border-top:1px solid var(--line);max-height:130px;overflow:auto}
-.box .out .blocked{color:var(--amber);font-weight:600}.box .out .error{color:#B3402A}
-.hint{color:var(--muted);font-size:13px;text-align:center;padding-bottom:12px}[hidden]{display:none!important}
+.box .out{padding:8px 14px;font:13px/1.5 ui-monospace,Menlo,monospace;color:var(--text2);border-top:1px solid var(--sep);max-height:130px;overflow:auto}.out .blocked{color:var(--err);font-weight:600}.out .error{color:var(--err)}
+.composer{display:flex;align-items:flex-end;gap:6px;padding:8px 10px calc(10px + env(safe-area-inset-bottom));border-top:1px solid var(--sep);background:var(--bg)}
+.composer textarea{flex:1;background:var(--fill);border:0;border-radius:22px;padding:11px 16px;outline:0;resize:none;max-height:120px;line-height:1.4}
+.send{width:44px;height:44px;border-radius:50%;background:var(--accent);color:var(--on);display:grid;place-items:center;flex:none}.send.rec{background:var(--err)}
+.sw{width:50px;height:30px;border-radius:15px;background:var(--pressed);position:relative;flex:none;transition:.15s}.sw::after{content:"";position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:#fff;transition:.15s;box-shadow:0 1px 3px rgba(0,0,0,.3)}.sw.on{background:var(--accent)}.sw.on::after{left:23px;background:var(--on)}
+.seg{display:flex;background:var(--fill);border-radius:12px;padding:3px;margin:0 16px}.seg button{flex:1;padding:8px;border-radius:9px;font-weight:500}.seg button.on{background:var(--bg);box-shadow:0 1px 3px rgba(0,0,0,.18)}
+.tour{position:fixed;inset:0;z-index:50}.tour .spot{position:absolute;border-radius:14px;box-shadow:0 0 0 9999px var(--scrim);transition:all .2s}.tour .card{position:absolute;left:16px;right:16px;max-width:420px;margin:0 auto;background:var(--surface);border:1px solid var(--sep);border-radius:18px;padding:18px;box-shadow:0 20px 50px rgba(0,0,0,.3)}
+.tour .card h3{margin:0 0 6px;font-size:18px}.tour .card p{margin:0 0 14px;color:var(--text2);font-size:15px}.tour .acts{display:flex;justify-content:space-between;align-items:center;gap:10px}.tour .acts .btn{width:auto;padding:10px 22px}.tour .acts span{color:var(--text3);font-size:13px}
+.toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:var(--accent);color:var(--on);padding:10px 18px;border-radius:14px;z-index:60;font-size:15px}
+.cvs{flex:1;min-height:0;display:flex}.cvs iframe{flex:1;border:0;background:#fff}
 </style>
 </head>
 <body>
-<header><a class="brand" href="/">Pocketnode</a><span id="who"></span></header>
-<main>
-  <section id="auth" class="auth">
-    <h1 id="authTitle">Try Pocketnode</h1>
-    <p>Sign up to ask it to search the web and open pages for you. Free while the hackathon runs.</p>
-    <input id="email" type="email" placeholder="Email" autocomplete="email">
-    <input id="pw" type="password" placeholder="Password (8 or more characters)" autocomplete="current-password">
-    <div class="err" id="err"></div>
-    <button class="btn" id="go" style="width:100%">Sign up</button>
-    <p style="margin:14px 0 0;text-align:center"><button class="link" id="swap">I already have an account</button></p>
-  </section>
-  <section id="chat" hidden style="flex:1;display:flex;flex-direction:column">
-    <div id="log">
-      <div class="m bot">Hi. I work inside your browser. I can search the web, open pages in new tabs, and write and run code live in a locked frame right here. Try one below.</div>
-      <div class="try" id="try"></div>
-    </div>
-    <div class="hint"><span id="hint"></span> <button class="link" id="fresh">New chat</button></div>
-    <form class="send" id="form"><input id="msg" placeholder="Ask me anything" autocomplete="off" maxlength="2000"><button class="btn" id="send">Send</button></form>
-  </section>
-</main>
+<div id="app"></div>
 <script>
-const $=id=>document.getElementById(id);let signup=true,busy=false;
-const api=async(p,b)=>{const r=await fetch(p,b?{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)}:{});let j={};try{j=await r.json()}catch(e){}return{ok:r.ok,j}};
-function mode(){$('go').textContent=signup?'Sign up':'Log in';$('swap').textContent=signup?'I already have an account':'Create an account';$('authTitle').textContent=signup?'Try Pocketnode':'Welcome back'}
-function show(user,limit){$('auth').hidden=!!user;$('chat').hidden=!user;$('who').innerHTML=user?user+' · <button class="link" id="out">Log out</button>':'';if(user){$('hint').textContent=limit+' messages a day per account.';$('out').onclick=async()=>{await api('/api/logout',{});location.reload()};$('msg').focus()}}
-$('swap').onclick=()=>{signup=!signup;mode()};
-$('go').onclick=async()=>{$('err').textContent='';$('go').disabled=true;const {ok,j}=await api(signup?'/api/signup':'/api/login',{email:$('email').value,password:$('pw').value});$('go').disabled=false;if(ok){const m=await api('/api/me');show(j.user,m.j.limit)}else $('err').textContent=j.error||'Something went wrong.'};
-$('pw').addEventListener('keydown',e=>{if(e.key==='Enter')$('go').click()});
-const examples=['Build me a 5-minute pomodoro timer I can use right now','Draw an animated chart of the Fibonacci sequence','Sandbox test: write code that tries to read this page\'s cookies and call another website, then tell me what was blocked','Search the web for Vultr serverless inference and open the top result in a new tab'];
-examples.forEach(t=>{const b=document.createElement('button');b.textContent=t.length>60?t.slice(0,57)+'…':t;b.onclick=()=>{$('msg').value=t;$('form').requestSubmit()};$('try').appendChild(b)});
-function add(cls,text){const d=document.createElement('div');d.className='m '+cls;d.textContent=text;$('log').appendChild(d);d.scrollIntoView({block:'end'});return d}
-function chip(label,ok){const c=document.createElement('div');c.className='chips';const x=document.createElement('span');x.className='chip'+(ok===false?' bad':'');x.innerHTML='<i></i>';x.append(label);c.appendChild(x);$('log').appendChild(c);c.scrollIntoView({block:'end'})}
-let convo=[],sid=0;
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const P={chat:'M4 5h16v11H9l-5 4z',files:'M6 3h8l4 4v14H6zM14 3v4h4',packs:'M12 3l8 4.5v9L12 21l-8-4.5v-9zM12 12l8-4.5M12 12v9M12 12L4 7.5',agents:'M12 3v3M8 6h8v6H8zM6 14h12v7H6zM10 9h.01M14 9h.01',plus:'M12 5v14M5 12h14',back:'M15 5l-7 7 7 7',chev:'M9 5l7 7-7 7',gear:'M12 15a3 3 0 100-6 3 3 0 000 6zM19 12h2M3 12h2M12 3v2M12 19v2M5.6 5.6L7 7M17 17l1.4 1.4M5.6 18.4L7 17M17 7l1.4-1.4',mic:'M12 3a3 3 0 013 3v6a3 3 0 01-6 0V6a3 3 0 013-3zM6 11a6 6 0 0012 0M12 17v4',send:'M12 19V5M6 11l6-6 6 6',clip:'M20 11l-8.5 8.5a5 5 0 01-7-7L13 4a3.5 3.5 0 015 5l-8.5 8.5a2 2 0 01-3-3L14 7',lock:'M6 11h12v9H6zM8 11V8a4 4 0 018 0v3',server:'M4 4h16v6H4zM4 14h16v6H4zM8 7h.01M8 17h.01',trash:'M5 7h14M9 7V4h6v3M7 7l1 13h8l1-13',globe:'M12 3a9 9 0 100 18 9 9 0 000-18zM3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18',code:'M9 8l-5 4 5 4M15 8l5 4-5 4',tab:'M4 6h16v13H4zM4 10h16M8 6V4',speak:'M4 9v6h4l5 4V5L8 9zM16 9a4 4 0 010 6',stop:'M7 7h10v10H7z',user:'M12 12a4 4 0 100-8 4 4 0 000 8zM4 21a8 8 0 0116 0',help:'M12 17h.01M9.5 9a2.5 2.5 0 115 0c0 1.5-2.5 2-2.5 4M12 3a9 9 0 100 18 9 9 0 000-18z',canvas:'M4 4h16v16H4zM4 9h16M9 9v11'};
+const ic=(n,s=22)=>`<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${P[n]}"/></svg>`;
+const api=async(p,b)=>{try{const r=await fetch(p,b?{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)}:{});let j={};try{j=await r.json()}catch(e){}return{ok:r.ok,j}}catch(e){return{ok:false,j:{error:'Cannot reach the server.'}}}};
+const uid=()=>Math.random().toString(36).slice(2,10);
+function toast(t){const d=document.createElement('div');d.className='toast';d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),2200)}
+
+/* ---------- state ---------- */
+let user=null,limit=40,S=null,nav=[{r:'boot'}],tab=0,busy=false,stopFlag=false;
+const PACKS=[['web','globe','Web','Search the web and read pages.'],['tabs','tab','Browser tabs','Open pages in new tabs for you.'],['code','code','Code','Write and run programs in a locked frame.'],['voice','speak','Voice','Read answers out loud.'],['files','files','Files','Save text files from the chat.']];
+const TOOLPACK={web_search:'web',web_read:'web',open_tab:'tabs',run_code:'code',speak:'voice',download_file:'files'};
+const IDEAS=[['Build me a 5-minute pomodoro timer I can use right now','Pomodoro timer'],['Draw an animated chart of the Fibonacci sequence','Animated chart'],['Sandbox test: write code that tries to read this page\'s cookies and call another website, then tell me what was blocked','Sandbox test'],['Search the web for Vultr serverless inference and open the top result in a new tab','Search and open a tab']];
+const key=()=>'pn:'+user;
+function load(){let d={};try{d=JSON.parse(localStorage.getItem(key())||'{}')}catch(e){}S=Object.assign({threads:[],files:[],agents:[],canvases:[],activity:[],packs:{web:1,tabs:1,code:1,voice:1,files:1},on:true,onboarded:false,theme:'auto'},d);if(!S.agents.length&&!d.onboarded)S.agents=IDEAS.slice(0,3).map(([p,n])=>({id:uid(),name:n,prompt:p}));applyTheme()}
+function save(){try{localStorage.setItem(key(),JSON.stringify(S))}catch(e){toast('Browser storage is full. Delete some chats or files.')}}
+function applyTheme(){const t=S?S.theme:'auto';if(t==='auto')document.documentElement.removeAttribute('data-theme');else document.documentElement.setAttribute('data-theme',t)}
+const logA=(tool,detail,ok=true)=>{S.activity.unshift({t:Date.now(),tool,detail:String(detail||'').slice(0,160),ok});S.activity.length=Math.min(S.activity.length,150);save()};
+const ago=t=>{const s=(Date.now()-t)/1000;return s<60?'now':s<3600?Math.floor(s/60)+' min':s<86400?Math.floor(s/3600)+' h':new Date(t).toLocaleDateString()};
+
+/* ---------- navigation ---------- */
+function go(r,a){nav.push(Object.assign({r},a||{}));render()}
+function back(){if(nav.length>1)nav.pop();render()}
+function reset(r,a){nav=[Object.assign({r},a||{})];render()}
+const cur=()=>nav[nav.length-1];
+function bar(title,o={}){return `<div class="top">${o.back?`<button class="ib" data-back aria-label="Back">${ic('back',26)}</button>`:'<span style="width:44px"></span>'}<b style="overflow:hidden;white-space:nowrap;text-overflow:ellipsis;max-width:60%">${o.small?esc(title):''}</b>${o.right||'<span style="width:44px"></span>'}</div>`}
+function render(){const t=cur(),A=$('#app');A.innerHTML=SCREENS[t.r](t);$$('[data-back]').forEach(b=>b.onclick=back);const after=AFTER[t.r];if(after)after(t)}
+
+/* ---------- screens ---------- */
+const SCREENS={
+boot:()=>`<div class="scr"><div class="hero"><p class="sub" style="text-align:center">Loading…</p></div></div>`,
+welcome:()=>`<div class="scr"><div class="hero"><div class="mark">${ic('server',38)}</div>
+<h1 class="lt" style="text-align:center;padding:0">Pocketnode</h1><p class="sub" style="text-align:center;margin-bottom:34px">An assistant that works inside your browser</p>
+<div class="feat"><div class="av">${ic('lock')}</div><div><b>Private by design</b><span>Your chats, files and agents stay in this browser. Only the messages you send go to the model.</span></div></div>
+<div class="feat"><div class="av">${ic('packs')}</div><div><b>Extend with packs</b><span>Turn abilities on or off: web search, new tabs, code, voice and files.</span></div></div>
+<div class="feat"><div class="av">${ic('server')}</div><div><b>Runs on Vultr</b><span>Answers come from Vultr Serverless Inference, on a server you can also run yourself.</span></div></div></div>
+<div class="pad" style="padding-bottom:calc(24px + env(safe-area-inset-bottom))"><button class="btn" id="start">Get started</button></div></div>`,
+account:t=>`<div class="scr">${bar('',{back:nav.length>1})}<div class="body"><div class="pad"><h2 class="t" style="font-size:28px">${t.signup?'Create your account':'Welcome back'}</h2><p class="sub" style="margin-bottom:22px">${t.signup?'It is free while the hackathon runs. One account keeps your chats in one place.':'Log in to pick up where you left off.'}</p>
+<label class="lbl" for="em">Email</label><input class="f" id="em" type="email" autocomplete="email" placeholder="you@example.com">
+<label class="lbl" for="pw">Password</label><input class="f" id="pw" type="password" autocomplete="${t.signup?'new-password':'current-password'}" placeholder="8 or more characters">
+<div class="err" id="err"></div><button class="btn" id="go">${t.signup?'Sign up':'Log in'}</button>
+<button class="txt" id="swap">${t.signup?'I already have an account':'Create an account'}</button></div></div></div>`,
+finish:()=>`<div class="scr g">${bar('')}<div class="body"><div class="pad"><h2 class="t" style="font-size:28px">You are set</h2><p class="sub" style="margin-bottom:20px">Pocketnode is connected to a model and ready. Here is what is on.</p></div>
+<div class="list"><div class="row" style="cursor:default"><div class="g1"><span class="a">Model</span></div><span class="v">Vultr · DeepSeek V4.1 Flash</span></div><div class="row" style="cursor:default"><div class="g1"><span class="a">Packs</span></div><span class="v">${PACKS.length} added</span></div></div>
+<p class="foot">You can change these at any time in Packs and Settings.</p>
+<div class="pad" style="margin-top:22px"><button class="btn sec2" id="test">Test your setup</button><div class="foot" id="testout" style="padding:8px 2px"></div><p class="foot" style="padding:6px 2px 18px">Sends one short message to the model to check that it answers.</p><button class="btn" id="fin">Finish</button></div></div></div>`,
+main:()=>{const T=['Chats','Files','Packs','Agents'],I=['chat','files','packs','agents'];return `<div class="scr" id="tabbody"></div><nav class="tabs">${T.map((n,i)=>`<button data-tab="${i}" data-tour="tab_${n.toLowerCase()}" class="${tab===i?'on':''}">${ic(I[i],24)}${n}</button>`).join('')}</nav>`},
+thread:t=>{const th=S.threads.find(x=>x.id===t.id);return `<div class="scr">${bar(th.title,{back:true,small:true})}<div id="log"></div><div id="sugg"></div>
+<form class="composer" id="form"><input type="file" id="file" accept=".txt,.md,.csv,.json,.html,.js,.py,text/*" hidden>
+<button type="button" class="ib" id="attach" data-tour="composer_plus" aria-label="Add a file">${ic('clip')}</button>
+<textarea id="msg" rows="1" data-tour="composer_field" placeholder="Say what you want" maxlength="2000"></textarea>
+<button class="send" id="send" data-tour="composer_send" aria-label="Send"></button></form></div>`},
+settings:()=>`<div class="scr g">${bar('',{back:true})}<div class="body"><h1 class="lt">Settings</h1>
+<div class="list"><div class="row" style="cursor:default"><div class="av">${ic('user')}</div><div class="g1"><span class="a">${esc(user)}</span><div class="b">${limit} messages a day on this account</div></div></div></div>
+<p class="sec">Assistant</p><div class="list"><button class="row" id="onoff" data-tour="settings_assistant"><div class="g1"><span class="a">Assistant is ${S.on?'on':'off'}</span><div class="b">Switch it off and nothing runs. While it works, a Stop button shows in chats.</div></div><span class="sw ${S.on?'on':''}"></span></button>
+<button class="row" id="act" data-tour="settings_activity"><div class="g1"><span class="a">Activity</span><div class="b">Every tool it used, kept in this browser</div></div><span class="ch">${ic('chev',18)}</span></button></div>
+<p class="sec">Appearance</p><div class="seg">${['auto','light','dark'].map(x=>`<button data-th="${x}" class="${S.theme===x?'on':''}">${x[0].toUpperCase()+x.slice(1)}</button>`).join('')}</div>
+<p class="sec">Help</p><div class="list"><button class="row" id="tour"><div class="av">${ic('help')}</div><div class="g1"><span class="a">Take the tour</span></div><span class="ch">${ic('chev',18)}</span></button>
+<a class="row" href="/downloads/pocketnode.apk" style="text-decoration:none;color:inherit"><div class="av">${ic('files')}</div><div class="g1"><span class="a">Get the Android app</span><div class="b">The same assistant, with your phone's tools</div></div><span class="ch">${ic('chev',18)}</span></a></div>
+<p class="sec">Data</p><div class="list"><button class="row" id="wipe"><div class="g1"><span class="a" style="color:var(--err)">Delete chats, files and agents</span><div class="b">Only from this browser</div></div></button><button class="row" id="logout"><div class="g1"><span class="a">Log out</span></div></button></div></div></div>`,
+activity:()=>`<div class="scr g">${bar('',{back:true})}<div class="body"><h1 class="lt">Activity</h1>${S.activity.length?`<div class="list">${S.activity.map(a=>`<div class="row" style="cursor:default"><div class="g1"><span class="a">${esc(a.tool)}</span><div class="b">${esc(a.detail)}</div></div><span class="v" style="${a.ok?'':'color:var(--err)'}">${a.ok?ago(a.t):'failed'}</span></div>`).join('')}</div><p class="foot">Kept in this browser only.</p>`:`<div class="empty">Nothing yet. Tools it uses will be listed here.</div>`}</div></div>`,
+file:t=>{const f=S.files.find(x=>x.id===t.id);return `<div class="scr g">${bar(f.name,{back:true,small:true,right:`<button class="ib" id="del" aria-label="Delete">${ic('trash')}</button>`})}<div class="body"><div class="pad"><pre style="white-space:pre-wrap;overflow-wrap:anywhere;background:var(--surface);border-radius:14px;padding:14px;font:13px/1.5 ui-monospace,Menlo,monospace;margin:0 0 14px">${esc(f.content.slice(0,20000))}</pre><button class="btn" id="dl">Save a copy</button></div></div></div>`},
+canvas:t=>{const c=S.canvases.find(x=>x.id===t.id);return `<div class="scr">${bar(c.name,{back:true,small:true,right:`<button class="ib" id="del" aria-label="Delete">${ic('trash')}</button>`})}<div class="cvs" id="cv"></div></div>`},
+agent:t=>{const a=t.id?S.agents.find(x=>x.id===t.id):{name:'',prompt:''};return `<div class="scr g">${bar('',{back:true,right:t.id?`<button class="ib" id="del" aria-label="Delete">${ic('trash')}</button>`:null})}<div class="body"><div class="pad"><h2 class="t" style="font-size:28px">${t.id?'Edit agent':'New agent'}</h2><p class="sub" style="margin-bottom:20px">An agent is a saved instruction. Run it any time and it starts a new chat with the browser tools.</p>
+<label class="lbl" for="an">Name</label><input class="f" id="an" value="${esc(a.name)}" maxlength="40" placeholder="Morning news">
+<label class="lbl" for="ap">What should it do?</label><textarea class="f" id="ap" rows="5" maxlength="1000" placeholder="Search the web for today's top tech news and open the best source in a new tab">${esc(a.prompt)}</textarea>
+<div class="err" id="err"></div><button class="btn" id="sv">Save</button>${t.id?'<button class="txt" id="run">Run it now</button>':''}</div></div></div>`}
+};
+
+/* ---------- tabs ---------- */
+const gearBtn=`<button class="ib" id="gear" data-tour="gear" aria-label="Settings">${ic('gear')}</button>`;
+const blank='<span style="width:44px"></span>';
+const TABS=[
+()=>{const L=S.threads.slice().sort((a,b)=>b.updated-a.updated);return `<div class="top">${gearBtn}<span></span><button class="ib" id="newchat" data-tour="chats_plus" aria-label="New chat">${ic('plus',26)}</button></div><h1 class="lt">Chats</h1><div class="body">${L.length?`<div class="list">${L.map(t=>`<button class="row" data-th="${t.id}"><div class="g1"><span class="a">${esc(t.title)}</span><div class="b">${esc(t.preview||'')}</div></div><span class="v">${ago(t.updated)}</span></button>`).join('')}</div>`:`<div class="empty"><div class="av">${ic('chat',26)}</div><b style="color:var(--text)">No chats yet</b><p>Tap the plus to start. Talk to it the way you would text a helpful friend.</p></div>`}</div>`},
+()=>`<div class="top">${gearBtn}<span></span>${blank}</div><h1 class="lt">Files</h1><div class="body">${S.files.length?`<div class="list">${S.files.map(f=>`<button class="row" data-f="${f.id}"><div class="av">${ic('files')}</div><div class="g1"><span class="a">${esc(f.name)}</span><div class="b">${ago(f.time)} · ${f.content.length} characters</div></div><span class="ch">${ic('chev',18)}</span></button>`).join('')}</div>`:`<div class="empty"><div class="av">${ic('files',26)}</div><b style="color:var(--text)">No files yet</b><p>Ask the assistant to write something down, like "save my packing list as a file". It is kept here.</p></div>`}</div>`,
+()=>`<div class="top">${gearBtn}<span></span>${blank}</div><h1 class="lt">Packs</h1><div class="body"><p class="foot" style="padding:0 20px 12px">Packs give your assistant abilities. Switch them on or off whenever you like.</p><div class="list">${PACKS.map(([k,i,n,d])=>`<button class="row" data-pk="${k}"><div class="av">${ic(i)}</div><div class="g1"><span class="a">${n}</span><div class="b">${d}</div></div><span class="sw ${S.packs[k]?'on':''}"></span></button>`).join('')}</div></div>`,
+()=>`<div class="top">${gearBtn}<span></span><button class="ib" id="newag" aria-label="New agent">${ic('plus',26)}</button></div><h1 class="lt">Agents</h1><div class="body"><p class="sec" style="padding-top:0">Your agents</p>${S.agents.length?`<div class="list">${S.agents.map(a=>`<button class="row" data-ag="${a.id}"><div class="av">${ic('agents')}</div><div class="g1"><span class="a">${esc(a.name)}</span><div class="b">${esc(a.prompt)}</div></div><span class="ch">${ic('chev',18)}</span></button>`).join('')}</div>`:'<p class="foot">No agents yet. Tap the plus to save one.</p>'}
+<p class="sec">Canvas</p>${S.canvases.length?`<div class="list">${S.canvases.map(c=>`<button class="row" data-cv="${c.id}"><div class="av">${ic('canvas')}</div><div class="g1"><span class="a">${esc(c.name)}</span><div class="b">Program saved from a chat</div></div><span class="ch">${ic('chev',18)}</span></button>`).join('')}</div>`:`<p class="foot">Programs the assistant writes can be saved here from the chat, and reopened any time. They run in a locked frame.</p>`}</div>`
+];
+const AFTER={
+welcome:()=>{$('#start').onclick=()=>{localStorage.setItem('pn:seen','1');go('account',{signup:true})}},
+account:t=>{$('#swap').onclick=()=>{nav[nav.length-1].signup=!t.signup;render()};const g=$('#go');
+ g.onclick=async()=>{$('#err').textContent='';g.disabled=true;const {ok,j}=await api(t.signup?'/api/signup':'/api/login',{email:$('#em').value,password:$('#pw').value});g.disabled=false;if(!ok){$('#err').textContent=j.error||'Something went wrong.';return}await enter(j.user)};
+ $('#pw').addEventListener('keydown',e=>{if(e.key==='Enter')g.click()});$('#em').focus()},
+finish:()=>{$('#test').onclick=async()=>{const o=$('#testout');o.style.color='';o.textContent='Checking the connection…';const {ok,j}=await api('/api/step',{messages:[{role:'user',content:'Reply with the single word: ready'}]});o.textContent=ok?'Connected. The model answered.':(j.error||'Could not reach the model.');o.style.color=ok?'':'var(--err)'};
+ $('#fin').onclick=()=>{S.onboarded=true;save();tab=0;reset('main');setTimeout(startTour,400)}},
+main:()=>{drawTab();$$('[data-tab]').forEach(b=>b.onclick=()=>{tab=+b.dataset.tab;render()})},
+settings:()=>{$('#onoff').onclick=()=>{S.on=!S.on;save();render()};$('#act').onclick=()=>go('activity');
+ $$('[data-th]').forEach(b=>b.onclick=()=>{S.theme=b.dataset.th;applyTheme();save();render()});
+ $('#tour').onclick=()=>{tab=0;reset('main');setTimeout(startTour,300)};
+ $('#wipe').onclick=()=>{if(confirm('Delete every chat, file, agent and canvas from this browser?')){localStorage.removeItem(key());load();save();toast('Deleted');tab=0;reset('main')}};
+ $('#logout').onclick=async()=>{await api('/api/logout',{});user=null;S=null;applyTheme();reset('welcome')}},
+file:t=>{const f=S.files.find(x=>x.id===t.id);$('#dl').onclick=()=>dl(f);$('#del').onclick=()=>{S.files=S.files.filter(x=>x.id!==f.id);save();back()}},
+canvas:t=>{const c=S.canvases.find(x=>x.id===t.id);const f=document.createElement('iframe');f.setAttribute('sandbox','allow-scripts');f.srcdoc=wrap(c.html,'cv');$('#cv').appendChild(f);$('#del').onclick=()=>{S.canvases=S.canvases.filter(x=>x.id!==c.id);save();back()}},
+agent:t=>{$('#sv').onclick=()=>{const n=$('#an').value.trim(),p=$('#ap').value.trim();if(!n||!p){$('#err').textContent='Give it a name and what it should do.';return}
+ if(t.id){const a=S.agents.find(x=>x.id===t.id);a.name=n;a.prompt=p}else S.agents.push({id:uid(),name:n,prompt:p});save();back()};
+ if(t.id){const a=S.agents.find(x=>x.id===t.id);$('#del').onclick=()=>{S.agents=S.agents.filter(x=>x.id!==a.id);save();back()};$('#run').onclick=()=>{nav.pop();newThread(a.prompt)}}}
+};
+function dl(f){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([f.content],{type:'text/plain'}));a.download=f.name;a.click()}
+function drawTab(){const b=$('#tabbody');b.className='scr'+(tab===0?'':' g');b.innerHTML=TABS[tab]();const g=$('#gear');if(g)g.onclick=()=>go('settings');
+ if($('#newchat'))$('#newchat').onclick=()=>newThread();
+ $$('[data-th]').forEach(r=>r.onclick=()=>go('thread',{id:r.dataset.th}));
+ $$('[data-f]').forEach(r=>r.onclick=()=>go('file',{id:r.dataset.f}));
+ $$('[data-cv]').forEach(r=>r.onclick=()=>go('canvas',{id:r.dataset.cv}));
+ $$('[data-ag]').forEach(r=>r.onclick=()=>go('agent',{id:r.dataset.ag}));
+ if($('#newag'))$('#newag').onclick=()=>go('agent',{});
+ $$('[data-pk]').forEach(r=>r.onclick=()=>{S.packs[r.dataset.pk]=S.packs[r.dataset.pk]?0:1;save();drawTab()})}
+function newThread(seed){const th={id:uid(),title:'New chat',preview:'',created:Date.now(),updated:Date.now(),convo:[],items:[]};S.threads.push(th);save();go('thread',{id:th.id,seed})}
+
+/* ---------- thread ---------- */
 const CSP='<meta http-equiv="Content-Security-Policy" content="default-src \'none\'; script-src \'unsafe-inline\'; style-src \'unsafe-inline\'; img-src data: blob:; media-src data:">';
 const BRIDGE='<script>(function(){var id="__ID__";function send(k,t){try{parent.postMessage({pn:id,k:k,t:String(t).slice(0,500)},"*")}catch(e){}}'
  +'["log","info","warn","error"].forEach(function(k){var o=console[k];console[k]=function(){send(k,[].map.call(arguments,function(a){try{return typeof a==="object"?JSON.stringify(a):String(a)}catch(e){return String(a)}}).join(" "));try{o&&o.apply(console,arguments)}catch(e){}}});'
  +'addEventListener("error",function(e){send("error",e.message)});addEventListener("unhandledrejection",function(e){send("error","Unhandled: "+(e.reason&&e.reason.message||e.reason))});'
  +'document.addEventListener("securitypolicyviolation",function(e){send("blocked",e.violatedDirective+" blocked "+(e.blockedURI||"inline"))});})()<\/script>';
 function wrap(html,id){const inj=CSP+BRIDGE.replace('__ID__',id);const m=/^\s*<!doctype[^>]*>/i.exec(html);return m?m[0]+inj+html.slice(m[0].length):inj+html}
-function runCode(title,html){return new Promise(res=>{
-  const id='f'+(++sid)+Math.random().toString(36).slice(2);const box=document.createElement('div');box.className='box';
-  box.innerHTML='<div class="bar"><b></b><span>Locked frame: no network, no cookies, no access to this page</span></div>';box.querySelector('b').textContent=title||'Program';
-  const f=document.createElement('iframe');f.setAttribute('sandbox','allow-scripts');f.srcdoc=wrap(String(html||''),id);box.appendChild(f);
-  const out=document.createElement('div');out.className='out';out.hidden=true;box.appendChild(out);$('log').appendChild(box);box.scrollIntoView({block:'end'});
-  const logs=[],errors=[],blocked=[];
-  const on=e=>{if(e.source!==f.contentWindow||!e.data||e.data.pn!==id)return;const {k,t}=e.data;out.hidden=false;const l=document.createElement('div');l.className=k==='blocked'?'blocked':k==='error'?'error':'';l.textContent=(k==='blocked'?'Blocked: ':k==='error'?'Error: ':'')+t;out.appendChild(l);out.scrollTop=out.scrollHeight;(k==='blocked'?blocked:k==='error'?errors:logs).push(t)};
-  addEventListener('message',on);
-  setTimeout(()=>{res({ok:errors.length===0,logs:logs.slice(0,20),errors:errors.slice(0,10),blocked_by_sandbox:blocked.slice(0,10),note:'The program is running in the frame. It cannot use the network, cookies or the page around it.'})},2000)})}
+let TH=null;
+function node(it){const L=$('#log');if(!L)return null;let n;
+ if(it.t==='me'||it.t==='bot'){n=document.createElement('div');n.className='m '+it.t;n.textContent=it.x}
+ else if(it.t==='chip'){n=document.createElement('div');n.className='chip'+(it.bad?' bad':'');n.innerHTML='<i></i>';n.append(it.x)}
+ else if(it.t==='open'){n=document.createElement('a');n.className='open';n.href=it.u;n.target='_blank';n.rel='noopener noreferrer';n.textContent=(it.opened?'Opened in a new tab: ':'Open in a new tab: ')+it.u}
+ else if(it.t==='file'){n=document.createElement('a');n.className='open';n.href='#';n.textContent='Saved '+it.name+' to Files';n.onclick=e=>{e.preventDefault();const f=S.files.find(x=>x.id===it.fid);if(f)go('file',{id:f.id})}}
+ else if(it.t==='code'){const id='f'+uid();n=document.createElement('div');n.className='box';n.innerHTML='<div class="bar"><b></b><span>Locked frame: no network, no cookies</span><button>Save to Canvas</button></div>';n.querySelector('b').textContent=it.title||'Program';
+  n.querySelector('button').onclick=e=>{S.canvases.push({id:uid(),name:it.title||'Program',html:it.html});save();e.target.textContent='Saved';e.target.disabled=true};
+  const f=document.createElement('iframe');f.setAttribute('sandbox','allow-scripts');f.srcdoc=wrap(it.html,id);n.appendChild(f);const out=document.createElement('div');out.className='out';out.hidden=true;n.appendChild(out);
+  const res={logs:[],errors:[],blocked:[]};
+  const on=e=>{if(e.source!==f.contentWindow||!e.data||e.data.pn!==id)return;const {k,t}=e.data;out.hidden=false;const l=document.createElement('div');l.className=k==='blocked'?'blocked':k==='error'?'error':'';l.textContent=(k==='blocked'?'Blocked: ':k==='error'?'Error: ':'')+t;out.appendChild(l);out.scrollTop=out.scrollHeight;(k==='blocked'?res.blocked:k==='error'?res.errors:res.logs).push(t)};
+  addEventListener('message',on);it._res=res}
+ L.appendChild(n);n.scrollIntoView({block:'end'});return n}
+function add(it){const stored=it.t==='code'?{t:'code',title:it.title,html:it.html}:it;TH.items.push(stored);const n=node(it);TH.updated=Date.now();save();return n}
 async function exec(name,args){
-  if(['web_search','web_read','now'].includes(name)){const {ok,j}=await api('/api/tool',{name,args});chip((name==='web_search'?'Searched: '+(args.query||''):name==='web_read'?'Read a page':'Checked the time')+(j.error?' · '+j.error:j.results?' · '+j.results.length+' results':''),!j.error);return ok?j:{error:j.error||'failed'}}
-  if(name==='open_tab'){const url=String(args.url||'');if(!/^https?:\/\/\S+$/.test(url))return{error:'Not a web address.'};const w=window.open(url,'_blank','noopener');const l=document.createElement('a');l.className='open';l.href=url;l.target='_blank';l.rel='noopener noreferrer';l.textContent=(w?'Opened in a new tab: ':'Open in a new tab: ')+url;$('log').appendChild(l);l.scrollIntoView({block:'end'});return{ok:true,opened:!!w,note:w?'Opened.':'The browser blocked the popup; a link was shown to the user.'}}
-  if(name==='run_code'){chip('Running code: '+(args.title||'program'));return runCode(args.title,args.html)}
-  if(name==='speak'){try{speechSynthesis.cancel();speechSynthesis.speak(new SpeechSynthesisUtterance(String(args.text||'').slice(0,500)));chip('Speaking');return{ok:true}}catch(e){return{error:'Speech is not available here.'}}}
-  if(name==='download_file'){const fn=String(args.filename||'file.txt').replace(/[^\w.\- ]/g,'_').slice(0,80);const url=URL.createObjectURL(new Blob([String(args.content||'')],{type:'text/plain'}));const l=document.createElement('a');l.className='open';l.href=url;l.download=fn;l.textContent='Save '+fn;$('log').appendChild(l);l.scrollIntoView({block:'end'});return{ok:true,note:'A save link was shown to the user.'}}
-  return{error:'Unknown tool.'}}
-$('form').onsubmit=async e=>{e.preventDefault();const t=$('msg').value.trim();if(!t||busy)return;busy=true;$('send').disabled=true;$('msg').value='';$('try').hidden=true;
-  add('me',t);convo.push({role:'user',content:t});const wait=add('bot','Working on it…');
-  try{for(let i=0;i<8;i++){
-    const {ok,j}=await api('/api/step',{messages:convo});wait.remove();
-    if(!ok){if(j.error==='Log in first.'){location.reload();return}add('bot',j.error||'Something went wrong.');convo.pop();break}
-    const m=j.message;convo.push(m);if(m.content)add('bot',m.content);
-    if(!m.tool_calls||!m.tool_calls.length)break;
-    for(const c of m.tool_calls){let args={};try{args=JSON.parse(c.function.arguments||'{}')}catch(_){}
-      let r;try{r=await exec(c.function.name,args)}catch(err){r={error:String(err).slice(0,120)}}
-      convo.push({role:'tool',tool_call_id:c.id,content:JSON.stringify(r).slice(0,8000)})}
-    if(i===7)add('bot','I stopped after several steps. Ask me to continue if you want more.')}}
-  catch(err){add('bot','Something went wrong. Try again.')}
-  wait.remove();busy=false;$('send').disabled=false;$('msg').focus()};
-$('fresh').onclick=()=>{convo=[];$('log').querySelectorAll('.m.me,.m.bot:not(:first-child),.chips,.box,.open').forEach(n=>n.remove());$('try').hidden=false};
-mode();api('/api/me').then(({j})=>show(j.user,j.limit)).catch(()=>show(null));
+ const pk=TOOLPACK[name];if(pk&&!S.packs[pk]){add({t:'chip',x:'Skipped '+name+' (pack is off)',bad:true});logA(name,'pack is off',false);return{error:'That pack is switched off by the user.'}}
+ if(name==='web_search'||name==='web_read'||name==='now'){const {ok,j}=await api('/api/tool',{name,args});const lbl=name==='web_search'?'Searched: '+(args.query||''):name==='web_read'?'Read '+String(args.url||'a page').slice(0,60):'Checked the time';add({t:'chip',x:lbl+(j.error?' · '+j.error:j.results?' · '+j.results.length+' results':''),bad:!!j.error});logA(name,args.query||args.url||'',!j.error);return ok?j:{error:j.error||'failed'}}
+ if(name==='open_tab'){const url=String(args.url||'');if(!/^https?:\/\/\S+$/.test(url))return{error:'Not a web address.'};const w=window.open(url,'_blank','noopener');add({t:'open',u:url,opened:!!w});logA('open_tab',url);return{ok:true,opened:!!w,note:w?'Opened.':'The browser blocked the popup; a link was shown to the user.'}}
+ if(name==='run_code'){const it={t:'code',title:args.title,html:String(args.html||'')};add(it);logA('run_code',args.title||'program');await new Promise(r=>setTimeout(r,2000));const r=it._res||{logs:[],errors:[],blocked:[]};return{ok:!r.errors.length,logs:r.logs.slice(0,20),errors:r.errors.slice(0,10),blocked_by_sandbox:r.blocked.slice(0,10),note:'The program is running in the frame. It cannot use the network, cookies or the page around it.'}}
+ if(name==='speak'){try{speechSynthesis.cancel();speechSynthesis.speak(new SpeechSynthesisUtterance(String(args.text||'').slice(0,500)));add({t:'chip',x:'Speaking'});logA('speak',args.text);return{ok:true}}catch(e){return{error:'Speech is not available here.'}}}
+ if(name==='download_file'){const fn=String(args.filename||'file.txt').replace(/[^\w.\- ]/g,'_').slice(0,80),f={id:uid(),name:fn,content:String(args.content||'').slice(0,100000),time:Date.now()};S.files.push(f);add({t:'file',name:fn,fid:f.id});logA('download_file',fn);return{ok:true,note:'Saved in the Files tab.'}}
+ return{error:'Unknown tool.'}}
+async function sendMsg(t){if(busy||!t.trim())return;if(!S.on){toast('The assistant is switched off in Settings.');return}
+ busy=true;stopFlag=false;setSend();if($('#sugg'))$('#sugg').innerHTML='';
+ if(TH.title==='New chat')TH.title=t.slice(0,40);TH.preview=t.slice(0,80);add({t:'me',x:t});TH.convo.push({role:'user',content:t});
+ const wait=document.createElement('div');wait.className='m bot';wait.textContent='Working on it…';$('#log').appendChild(wait);wait.scrollIntoView({block:'end'});
+ try{for(let i=0;i<8&&!stopFlag;i++){
+   const {ok,j}=await api('/api/step',{messages:TH.convo.slice(-40)});wait.remove();
+   if(!ok){if(j.error==='Log in first.'){location.reload();return}add({t:'bot',x:j.error||'Something went wrong.'});TH.convo.pop();break}
+   const m=j.message;TH.convo.push(m);if(m.content)add({t:'bot',x:m.content});
+   if(!m.tool_calls||!m.tool_calls.length)break;
+   for(const c of m.tool_calls){let args={};try{args=JSON.parse(c.function.arguments||'{}')}catch(_){}
+    let r;try{r=await exec(c.function.name,args)}catch(err){r={error:String(err).slice(0,120)}}
+    TH.convo.push({role:'tool',tool_call_id:c.id,content:JSON.stringify(r).slice(0,8000)})}
+   if(i===7)add({t:'bot',x:'I stopped after several steps. Ask me to continue if you want more.'});
+   else if($('#log'))$('#log').appendChild(wait)}
+ }catch(err){add({t:'bot',x:'Something went wrong. Try again.'})}
+ wait.remove();busy=false;setSend();save()}
+let rec=null;const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+function setSend(){const b=$('#send'),m=$('#msg');if(!b)return;const empty=!m.value.trim();b.classList.toggle('rec',!!rec);b.innerHTML=busy?ic('stop'):(empty&&SR)?ic('mic'):ic('send');b.setAttribute('aria-label',busy?'Stop':empty&&SR?'Speak':'Send')}
+AFTER.thread=t=>{TH=S.threads.find(x=>x.id===t.id);TH.items.forEach(i=>node(i));const m=$('#msg');
+ const sg=$('#sugg');if(!TH.items.length){sg.innerHTML=`<p class="sec" style="padding-top:0">Not sure what to ask?</p><div class="list" data-tour="suggestions">${IDEAS.map((x,i)=>`<button type="button" class="row" data-i="${i}"><div class="g1"><span class="a">${esc(x[1])}</span></div><span class="ch">${ic('chev',18)}</span></button>`).join('')}</div><div style="height:10px"></div>`;$$('[data-i]').forEach(b=>b.onclick=()=>sendMsg(IDEAS[b.dataset.i][0]))}
+ m.oninput=()=>{m.style.height='auto';m.style.height=Math.min(m.scrollHeight,120)+'px';setSend()};
+ m.onkeydown=e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();$('#form').requestSubmit()}};
+ $('#form').onsubmit=e=>{e.preventDefault();if(busy){stopFlag=true;return}
+  if(!m.value.trim()){if(!SR)return;if(rec){rec.stop();return}rec=new SR();rec.interimResults=false;rec.onresult=ev=>{m.value=ev.results[0][0].transcript;m.oninput()};rec.onend=()=>{rec=null;setSend()};rec.start();setSend();return}
+  const v=m.value;m.value='';m.style.height='auto';sendMsg(v)};
+ $('#attach').onclick=()=>$('#file').click();
+ $('#file').onchange=e=>{const f=e.target.files[0];if(!f)return;if(f.size>60000){toast('That file is too big. Keep it under 60 KB.');return}const r=new FileReader();r.onload=()=>{m.value=(m.value?m.value+'\n\n':'')+'File "'+f.name+'":\n'+r.result;m.oninput()};r.readAsText(f)};
+ setSend();const seed=t.seed;if(seed){t.seed=null;setTimeout(()=>sendMsg(seed),50)}else if(!TH.items.length)m.focus()};
+
+/* ---------- tour ---------- */
+const STEPS=[
+ [null,'Welcome to Pocketnode','A one minute tour of the buttons you will use. Tap Next, or skip it and come back from Settings.',()=>{tab=0;reset('main')}],
+ ['tab_chats','Chats','Every conversation lives here, newest first. Each one is a separate thread with your assistant.',()=>{tab=0;reset('main')}],
+ ['chats_plus','Start a new chat','Tap the plus to begin. Talk to it the way you would text a helpful friend.'],
+ ['composer_field','Say what you want','Type here. Ask it to build something, search the web, or open a page in a new tab.',()=>{if(cur().r!=='thread')newThread()}],
+ ['composer_plus','Add a file','Attach a text file and the assistant reads it.'],
+ ['composer_send','Speak or send','With nothing typed this is the microphone, if your browser has one. Once you type, it becomes the send button. While it works, it turns into Stop.'],
+ ['suggestions','Not sure what to ask?','Tap any idea and it is sent for you.'],
+ ['tab_files','Files','Files the assistant saves are kept here, in this browser. Tap one to read it or save a copy.',()=>{tab=1;reset('main')}],
+ ['tab_packs','Packs','Packs give your assistant abilities: web, new tabs, code, voice and files. Switch them on or off whenever you like.',()=>{tab=2;reset('main')}],
+ ['tab_agents','Agents and Canvas','Save an instruction as an agent and run it any time. Programs the assistant writes can be saved to Canvas.',()=>{tab=3;reset('main')}],
+ ['settings_assistant','The big switch','Switch the assistant off here and nothing runs. While it works, a Stop button appears in the chat.',()=>{tab=0;reset('main');go('settings')}],
+ ['settings_activity','See everything it did','Every tool it used is listed here. It stays in this browser.'],
+ [null,'You are ready','Ask for something small to start, like a 5 minute timer. You can replay this tour from Settings, under Take the tour.',()=>{tab=0;reset('main')}]
+];
+let ti=0;
+function startTour(){ti=0;stepTour()}
+async function stepTour(){const old=$('.tour');if(old)old.remove();if(ti>=STEPS.length)return;const [id,title,body,prep]=STEPS[ti];if(prep){await prep();await new Promise(r=>setTimeout(r,200))}
+ const el=id?$(`[data-tour="${id}"]`):null;if(id&&!el){ti++;return stepTour()}
+ const d=document.createElement('div');d.className='tour';const r=el?el.getBoundingClientRect():null;
+ d.innerHTML=(r?`<div class="spot" style="left:${r.left-6}px;top:${r.top-6}px;width:${r.width+12}px;height:${r.height+12}px"></div>`:'<div class="spot" style="left:50%;top:50%;width:0;height:0"></div>')+`<div class="card"><h3>${esc(title)}</h3><p>${esc(body)}</p><div class="acts"><button class="txt" style="margin:0" id="tskip">Skip</button><span>${ti+1} of ${STEPS.length}</span><button class="btn" id="tnext">${ti===STEPS.length-1?'Done':'Next'}</button></div></div>`;
+ document.body.appendChild(d);const card=d.querySelector('.card');const h=card.offsetHeight;card.style.top=(r?(r.top<innerHeight/2?Math.min(r.bottom+18,innerHeight-h-12):Math.max(r.top-h-18,12)):(innerHeight/2-h/2))+'px';
+ $('#tskip').onclick=()=>d.remove();$('#tnext').onclick=()=>{ti++;stepTour()}}
+
+/* ---------- start ---------- */
+async function enter(u){user=u;const m=await api('/api/me');limit=(m.j&&m.j.limit)||limit;load();if(S.onboarded){tab=0;reset('main')}else reset('finish')}
+(async()=>{const m=await api('/api/me');if(m.ok&&m.j.user){user=m.j.user;limit=m.j.limit||limit;load();if(S.onboarded)reset('main');else reset('finish')}else if(localStorage.getItem('pn:seen'))reset('account',{signup:false});else reset('welcome')})();
 </script>
 </body>
 </html>

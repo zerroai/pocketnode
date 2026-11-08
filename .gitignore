@@ -23,3 +23,4 @@ google-services.json
 website/.next/
 website/out/
 *.apk
+__pycache__/
