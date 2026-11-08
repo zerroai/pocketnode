@@ -1,6 +1,6 @@
 #!/bin/bash
 # Builds the relay and copies it to a server that has Docker. Usage: deploy/relay/deploy.sh user@host relay.example.com
-# First time on the server: create ~/pocketnode-relay/relay.env from relay.env.example and put fcm-service-account.json beside it.
+# First time on the server: create ~/pocketnode-relay/relay.env from relay.env.example. Push wake-ups (Firebase) are optional.
 set -euo pipefail
 HOST="${1:?user@host}"; DOMAIN="${2:?domain}"
 cd "$(dirname "$0")/../.."

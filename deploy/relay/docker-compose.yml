@@ -7,7 +7,6 @@ services:
     env_file: relay.env
     volumes:
       - relay-data:/data
-      - ./fcm-service-account.json:/secrets/fcm.json:ro
     expose: ["8088"]
   caddy:
     image: caddy:2
