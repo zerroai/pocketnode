@@ -244,11 +244,16 @@ def run_tool(name, args, actions):
 
 
 def model_call(messages, tools=None, max_tokens=700):
-    body = json.dumps({"model": MODEL, "messages": messages, "tools": tools or TOOLS, "max_tokens": max_tokens}).encode()
+    body = json.dumps({"model": MODEL, "messages": messages, "tools": tools or TOOLS, "max_tokens": max_tokens,
+                       "chat_template_kwargs": {"enable_thinking": False}}).encode()
     req = urllib.request.Request(INFERENCE_URL + "/chat/completions", body,
                                  {"Authorization": "Bearer " + INFERENCE_KEY, "Content-Type": "application/json"})
-    with urllib.request.urlopen(req, timeout=60) as r:
-        return json.load(r)["choices"][0]["message"]
+    with urllib.request.urlopen(req, timeout=90) as r:
+        ch = json.load(r)["choices"][0]
+    m = ch["message"]
+    if ch.get("finish_reason") == "length" and not m.get("tool_calls"):
+        m = {"role": "assistant", "content": (m.get("content") or "") + "\n\nThat was too big for me to finish in one go. Try asking for something smaller."}
+    return m
 
 
 def agent(history):
@@ -387,7 +392,7 @@ class H(BaseHTTPRequestHandler):
                 args = d.get("args") if isinstance(d.get("args"), dict) else {}
                 return self.send(200, run_tool(name, args, []))
             msgs = d.get("messages")
-            if not isinstance(msgs, list) or not msgs or len(msgs) > 60 or len(json.dumps(msgs)) > 60000:
+            if not isinstance(msgs, list) or not msgs or len(msgs) > 60 or len(json.dumps(msgs)) > 150000:
                 return self.send(400, {"error": "Too much conversation. Start a new chat."})
             clean = []
             for m in msgs:
@@ -404,7 +409,7 @@ class H(BaseHTTPRequestHandler):
                     return self.send(429, {"error": "The demo has reached its daily limit. Try again tomorrow."})
                 q("INSERT INTO usage VALUES (?,?,1) ON CONFLICT(day,user_id) DO UPDATE SET n=n+1", (day, u["id"]), commit=True)
             try:
-                m = model_call([{"role": "system", "content": BROWSER_SYSTEM}] + clean, BROWSER_TOOLS, 2500)
+                m = model_call([{"role": "system", "content": BROWSER_SYSTEM}] + clean, BROWSER_TOOLS, 6000)
                 return self.send(200, {"message": {"role": "assistant", "content": m.get("content") or "", **({"tool_calls": m["tool_calls"]} if m.get("tool_calls") else {})}})
             except Exception as e:
                 return self.send(502, {"error": "The model did not answer. Try again.", "detail": clip(str(e), 120)})
