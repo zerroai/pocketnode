@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pocketnode Web</title>
+<link rel="icon" href="/favicon.svg">
+<style>
+:root{--paper:#F6F1E7;--card:#FFFBF2;--ink:#1B2A24;--muted:#5C6A62;--green:#1F5C45;--on:#F6F1E7;--amber:#C8782D;--line:#E2D9C6;--alt:#EFE8D8;--serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif}
+@media (prefers-color-scheme:dark){:root{--paper:#14201B;--card:#1B2B24;--ink:#EDE7D8;--muted:#9FB0A6;--green:#7CC4A0;--on:#14201B;--amber:#E39A56;--line:#2A3D34;--alt:#182720}}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;min-height:100vh;display:flex;flex-direction:column}
+header{display:flex;justify-content:space-between;align-items:center;padding:12px 20px;border-bottom:1px solid var(--line)}
+header a.brand{font:600 20px var(--serif);color:var(--green);text-decoration:none}header span{color:var(--muted);font-size:14px}
+button{font:inherit;cursor:pointer}.btn{background:var(--green);color:var(--on);border:0;border-radius:999px;padding:10px 20px;font-weight:600}.btn:disabled{opacity:.5}
+.link{background:none;border:0;color:var(--muted);text-decoration:underline;padding:0}
+main{flex:1;width:100%;max-width:760px;margin:0 auto;padding:20px;display:flex;flex-direction:column}
+.auth{margin:8vh auto 0;width:100%;max-width:380px;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:28px}
+.auth h1{font:600 28px var(--serif);margin:0 0 6px}.auth p{color:var(--muted);margin:0 0 18px}
+input{width:100%;font:inherit;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:var(--paper);color:var(--ink);margin-bottom:10px}
+.err{color:#B3402A;min-height:1.3em;font-size:14px;margin:4px 0 10px}@media (prefers-color-scheme:dark){.err{color:#F08A74}}
+#log{flex:1;display:flex;flex-direction:column;gap:12px;padding-bottom:12px}
+.m{max-width:88%;padding:10px 15px;border-radius:18px;white-space:pre-wrap;word-wrap:anywhere}.me{align-self:flex-end;background:var(--green);color:var(--on)}.bot{align-self:flex-start;background:var(--card);border:1px solid var(--line)}
+.chips{align-self:flex-start;display:flex;gap:6px;flex-wrap:wrap}.chip{font-size:13px;color:var(--muted);border:1px solid var(--line);border-radius:10px;padding:3px 10px;display:flex;gap:6px;align-items:center}.chip i{width:7px;height:7px;border-radius:50%;background:var(--amber);display:inline-block}.chip.bad i{background:#B3402A}
+.open{align-self:flex-start;background:var(--card);border:1px solid var(--green);color:var(--green);border-radius:12px;padding:8px 14px;text-decoration:none;font-weight:600;word-break:break-all}
+.try{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 16px}.try button{background:var(--alt);border:1px solid var(--line);border-radius:999px;padding:8px 14px;color:var(--ink)}
+form.send{position:sticky;bottom:0;background:var(--paper);padding:10px 0 16px;display:flex;gap:8px}form.send input{margin:0;flex:1}
+.hint{color:var(--muted);font-size:13px;text-align:center;padding-bottom:12px}[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<header><a class="brand" href="/">Pocketnode</a><span id="who"></span></header>
+<main>
+  <section id="auth" class="auth">
+    <h1 id="authTitle">Try Pocketnode</h1>
+    <p>Sign up to ask it to search the web and open pages for you. Free while the hackathon runs.</p>
+    <input id="email" type="email" placeholder="Email" autocomplete="email">
+    <input id="pw" type="password" placeholder="Password (8 or more characters)" autocomplete="current-password">
+    <div class="err" id="err"></div>
+    <button class="btn" id="go" style="width:100%">Sign up</button>
+    <p style="margin:14px 0 0;text-align:center"><button class="link" id="swap">I already have an account</button></p>
+  </section>
+  <section id="chat" hidden style="flex:1;display:flex;flex-direction:column">
+    <div id="log">
+      <div class="m bot">Hi. Ask me to look something up, read a page, or open a site in a new tab.</div>
+      <div class="try" id="try"></div>
+    </div>
+    <div class="hint" id="hint"></div>
+    <form class="send" id="form"><input id="msg" placeholder="Ask me anything" autocomplete="off" maxlength="2000"><button class="btn" id="send">Send</button></form>
+  </section>
+</main>
+<script>
+const $=id=>document.getElementById(id);let signup=true,history=[],busy=false;
+const api=async(p,b)=>{const r=await fetch(p,b?{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)}:{});let j={};try{j=await r.json()}catch(e){}return{ok:r.ok,j}};
+function mode(){$('go').textContent=signup?'Sign up':'Log in';$('swap').textContent=signup?'I already have an account':'Create an account';$('authTitle').textContent=signup?'Try Pocketnode':'Welcome back'}
+function show(user,limit){$('auth').hidden=!!user;$('chat').hidden=!user;$('who').innerHTML=user?user+' · <button class="link" id="out">Log out</button>':'';if(user){$('hint').textContent=limit+' messages a day per account.';$('out').onclick=async()=>{await api('/api/logout',{});location.reload()};$('msg').focus()}}
+$('swap').onclick=()=>{signup=!signup;mode()};
+$('go').onclick=async()=>{$('err').textContent='';$('go').disabled=true;const {ok,j}=await api(signup?'/api/signup':'/api/login',{email:$('email').value,password:$('pw').value});$('go').disabled=false;if(ok){const m=await api('/api/me');show(j.user,m.j.limit)}else $('err').textContent=j.error||'Something went wrong.'};
+$('pw').addEventListener('keydown',e=>{if(e.key==='Enter')$('go').click()});
+const examples=['Search the web for Vultr serverless inference and open the top result','What is the capital of Nigeria? Search to confirm','Read https://example.com and summarise it'];
+examples.forEach(t=>{const b=document.createElement('button');b.textContent=t;b.onclick=()=>{$('msg').value=t;$('form').requestSubmit()};$('try').appendChild(b)});
+function add(cls,text){const d=document.createElement('div');d.className='m '+cls;d.textContent=text;$('log').insertBefore(d,null);d.scrollIntoView({block:'end'});return d}
+$('form').onsubmit=async e=>{e.preventDefault();const t=$('msg').value.trim();if(!t||busy)return;busy=true;$('send').disabled=true;$('msg').value='';$('try').hidden=true;
+  add('me',t);history.push({role:'user',content:t});const wait=add('bot','Working on it…');
+  const {ok,j}=await api('/api/chat',{messages:history});wait.remove();
+  if(!ok){if(ok===false&&j.error==='Log in first.'){location.reload()}add('bot',j.error||'Something went wrong.')}
+  else{
+    if(j.steps&&j.steps.length){const c=document.createElement('div');c.className='chips';j.steps.forEach(s=>{const x=document.createElement('span');x.className='chip'+(s.ok?'':' bad');x.innerHTML='<i></i>';x.append((s.tool==='web_search'?'Searched: '+(s.args.query||''):s.tool==='web_read'?'Read a page':s.tool==='open_tab'?'Opened a tab':'Checked the time')+' · '+s.summary);c.appendChild(x)});$('log').appendChild(c)}
+    add('bot',j.reply||'(no reply)');history.push({role:'assistant',content:j.reply||''});
+    (j.actions||[]).filter(a=>a.type==='open').forEach(a=>{const w=window.open(a.url,'_blank','noopener');const l=document.createElement('a');l.className='open';l.href=a.url;l.target='_blank';l.rel='noopener noreferrer';l.textContent=(w?'Opened in a new tab: ':'Open in a new tab: ')+a.url;$('log').appendChild(l)});
+    $('log').lastElementChild.scrollIntoView({block:'end'})}
+  busy=false;$('send').disabled=false;$('msg').focus()};
+mode();api('/api/me').then(({j})=>show(j.user,j.limit)).catch(()=>show(null));
+</script>
+</body>
+</html>

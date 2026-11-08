@@ -29,7 +29,7 @@ fun interface HostNet {
 data class PackLimits(
     val memoryBytes: Long = 24L * 1024 * 1024,
     val stackBytes: Long = 512L * 1024,
-    val callTimeoutMs: Long = 2_000,
+    val callTimeoutMs: Long = 10_000,
 )
 
 /**

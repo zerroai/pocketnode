@@ -11,7 +11,7 @@ const faq = [
   ["Which phones work?", "Android 7.0 and newer. It has been tested on a Samsung Galaxy S9 running Android 10. There is no iPhone version."],
   ["Where do my chats live?", "On the phone, in the app's private storage. Keys are kept in Android's secure keystore. The model provider sees the messages you send it."],
   ["Can it do anything it likes on my phone?", "No. Each tool lists what it may touch. Sensitive actions, such as reading contacts or the calendar, are off until you switch them on, and some ask every time."],
-  ["Is it finished?", "No. It is an early build made for the Vultr Agent Rush hackathon. Expect rough edges."],
+  ["Is it finished?", "No. It is an early build made for the Vultr Agent Rush hackathon. Expect rough edges. The APK is a test build, not a Play Store release."],
 ] as const;
 
 export default function Home() {
@@ -24,7 +24,7 @@ export default function Home() {
             Pocketnode
           </a>
           <nav aria-label="Main">
-            <a href="#what">What it does</a><a href="#vultr">On Vultr</a><a href="#run">Run it</a><a className="btn small" href={REPO}>GitHub</a>
+            <a href="#what">What it does</a><a href="#try">Try it</a><a href="#vultr">On Vultr</a><a href="#run">Run it</a><a className="btn small" href={REPO}>GitHub</a>
           </nav>
         </div>
       </header>
@@ -34,7 +34,7 @@ export default function Home() {
           <p className="eyebrow">Android assistant · Vultr Agent Rush</p>
           <h1>An assistant that <em>acts</em> on your phone.</h1>
           <p className="lead">Pocketnode lives on your Android phone. Say &ldquo;turn on the flashlight&rdquo; or &ldquo;wake me at 6:30&rdquo; and it does it. Every model call goes through Vultr Serverless Inference.</p>
-          <div className="cta"><a className="btn" href={REPO}>View the code</a><a className="btn ghost" href="#vultr">How it uses Vultr</a></div>
+          <div className="cta"><a className="btn" href="/app/">Try it in your browser</a><a className="btn ghost" href="/downloads/pocketnode.apk">Download for Android</a><a className="btn ghost" href={REPO}>View the code</a></div>
           <div className="chat" role="img" aria-label="Example: the user asks to turn on the flashlight and Pocketnode confirms">
             <div className="msg me">Turn on the flashlight</div>
             <div className="tool"><span className="dot" />Phone · Flashlight on</div>
@@ -48,7 +48,15 @@ export default function Home() {
           <div className="cards">{abilities.map(([h, t]) => <article key={h} className="card"><h3>{h}</h3><p>{t}</p></article>)}</div>
         </div></section>
 
-        <section className="band alt" id="vultr"><div className="wrap">
+        <section className="band alt" id="try"><div className="wrap">
+          <h2>Two ways to try it</h2>
+          <div className="cards two">
+            <article className="card"><h3>In your browser</h3><p>Sign up and ask it to search the web, read a page or open a site in a new tab. Nothing to install. Search is limited to a daily number of messages per account.</p><p style={{ marginTop: 14 }}><a className="btn small" href="/app/">Open the web app</a></p></article>
+            <article className="card"><h3>On your Android phone</h3><p>Download the test build (Android 7.0 or newer), allow installs from this site, then open it. On the model screen choose Vultr and paste your own Vultr Inference key. There are no accounts in the phone app; your chats stay on the phone.</p><p style={{ marginTop: 14 }}><a className="btn small" href="/downloads/pocketnode.apk">Download the APK</a></p></article>
+          </div>
+        </div></section>
+
+        <section className="band" id="vultr"><div className="wrap">
           <h2>How it uses Vultr</h2>
           <p className="intro">Two Vultr services do the work. The phone stays in charge of your data.</p>
           <div className="flow" aria-label="Architecture">
@@ -63,7 +71,7 @@ export default function Home() {
           </div>
         </div></section>
 
-        <section className="band" id="safe"><div className="wrap">
+        <section className="band alt" id="safe"><div className="wrap">
           <h2>Kept on a short leash</h2>
           <ul className="checks">
             <li>Tools run in a sandbox and can only use the permissions they declare.</li>
@@ -73,7 +81,7 @@ export default function Home() {
           </ul>
         </div></section>
 
-        <section className="band alt" id="run"><div className="wrap">
+        <section className="band" id="run"><div className="wrap">
           <h2>Run it</h2>
           <pre><code>{`git clone ${REPO}
 cd pocketnode
@@ -82,7 +90,7 @@ cd pocketnode
           <p>In the app, choose <strong>Vultr</strong> on the model screen and paste your Vultr Inference key. To host the relay, see <code>deploy/relay/</code>.</p>
         </div></section>
 
-        <section className="band" id="faq"><div className="wrap">
+        <section className="band alt" id="faq"><div className="wrap">
           <h2>Questions</h2>
           <div className="faq">{faq.map(([q, a]) => <details key={q}><summary>{q}</summary><p>{a}</p></details>)}</div>
         </div></section>

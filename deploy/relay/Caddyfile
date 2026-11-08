@@ -1,11 +1,39 @@
 {$RELAY_DOMAIN} {
 	encode zstd gzip
-	reverse_proxy relay:8088 {
-		# Long polls stay open up to 30 seconds.
-		transport http {
-			response_header_timeout 45s
+
+	# The relay: phones connect out to these.
+	@relay path /v1/* /hook/* /healthz
+	handle @relay {
+		reverse_proxy relay:8088 {
+			# Long polls stay open up to 30 seconds.
+			transport http {
+				response_header_timeout 45s
+			}
 		}
 	}
+
+	# The web app's API (accounts and the agent loop).
+	handle /api/* {
+		reverse_proxy webapp:8090 {
+			transport http {
+				response_header_timeout 90s
+			}
+		}
+	}
+
+	# Test builds of the Android app.
+	handle /downloads/* {
+		root * /srv
+		file_server
+	}
+
+	# The website and the web app page.
+	handle {
+		root * /srv/site
+		try_files {path} {path}/index.html
+		file_server
+	}
+
 	header {
 		Strict-Transport-Security "max-age=31536000"
 		X-Content-Type-Options nosniff

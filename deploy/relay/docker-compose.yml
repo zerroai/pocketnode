@@ -1,5 +1,5 @@
-# One small machine: the relay plus Caddy, which gets and renews the TLS certificate by itself.
-# Put relay.env next to this file (see relay.env.example). Point your domain's DNS A record at the machine first.
+# One small machine: the relay, the web app, and Caddy, which serves the site and gets and renews the TLS certificate by itself.
+# Put relay.env and webapp.env next to this file (see the .example files). Point your domain's DNS A record at the machine first.
 services:
   relay:
     image: pocketnode-relay
@@ -8,6 +8,13 @@ services:
     volumes:
       - relay-data:/data
     expose: ["8088"]
+  webapp:
+    build: ./webapp
+    restart: unless-stopped
+    env_file: webapp.env
+    volumes:
+      - webapp-data:/data
+    expose: ["8090"]
   caddy:
     image: caddy:2
     restart: unless-stopped
@@ -16,8 +23,11 @@ services:
       RELAY_DOMAIN: ${RELAY_DOMAIN:?set RELAY_DOMAIN, for example relay.example.com}
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./site:/srv/site:ro
+      - ./downloads:/srv/downloads:ro
       - caddy-data:/data
-    depends_on: [relay]
+    depends_on: [relay, webapp]
 volumes:
   relay-data:
+  webapp-data:
   caddy-data:

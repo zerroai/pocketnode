@@ -378,7 +378,7 @@ object CoreHost {
         paused = appContext.getSharedPreferences("app", Context.MODE_PRIVATE).getBoolean("paused", false)
         VoiceCall.restoreAudio(appContext)
         dataSaver = appContext.getSharedPreferences("app", Context.MODE_PRIVATE).getBoolean("data_saver", false)
-        packManager = BundledPacks(listOf("phone", "reminders", "notes", "weather", "utilities", "math", "safety", "telegram")) { path -> runCatching { appContext.assets.open(path).use { it.readBytes() } }.getOrNull() }
+        packManager = BundledPacks(listOf("phone", "reminders", "notes", "weather", "utilities", "math", "safety", "telegram", "web")) { path -> runCatching { appContext.assets.open(path).use { it.readBytes() } }.getOrNull() }
         broker = PermissionBroker(persist = packKv)
         val vault = com.pocketnode.core.FileVault(FileKey(appContext)::get)
         val photos = PhotoFiles(File(appContext.cacheDir, "images"), vault).also { photoFiles = it; it.saver = dataSaver }
